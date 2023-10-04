@@ -1,0 +1,7 @@
+__pycache__
+env
+/.vs
+/organ/.vs/OrGAN
+*.sln
+*.pyproj
+/OrGAN.pyproj.user

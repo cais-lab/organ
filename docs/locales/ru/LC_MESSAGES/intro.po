@@ -1,0 +1,663 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, OrGAN authors
+# This file is distributed under the same license as the OrGAN package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OrGAN 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-25 11:27+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../intro.rst:2
+msgid "Introduction"
+msgstr "Введение"
+
+#: ../../intro.rst:5
+msgid "Installation"
+msgstr "Установка"
+
+#: ../../intro.rst:7
+msgid ""
+"The recommended way of using the library is to copy the contents of the "
+"``organ`` folder of the repository to your project. Make sure that the "
+"environment you're running satisfies the requirements of OrGAN. In order "
+"to do so, you may want to run:"
+msgstr ""
+"Рекомендуемый способ использования библиотеки - копирование содержимого "
+"папки ``organ`` репозитория в свой проект. Убедиесь, что используемое "
+"окружение соответствует требованиям бибилиотеки. Для этого необходимо "
+"выполнить следующую команду:"
+
+#: ../../intro.rst:16
+msgid ""
+"OrGAN repository root folder contains a number of scripts (first of all, "
+":file:`main.py`). If you only want to train an organization structure "
+"generator feeding your organization samples, then, most likely, you won't"
+" need any coding and the scripts may be all you need. In this case, just "
+"clone the repository, create a virtual environment and install "
+"dependencies:"
+msgstr ""
+"Корневой каталог репозитория OrGAN содержит набор скриптов (в первую очередь, "
+":file:`main.py`). Если нужно только обучить генератор организационных "
+"структур с использованием своих образцов, то, скорее всего, программирование "
+"не потребуется и имеющихся скриптов будет достаточно. В этом случае просто "
+"склонируйте репозиторий, создайте виртуальное окружение и установите "
+"зависимости:"
+
+#: ../../intro.rst:30
+msgid "After that, you can provide a dataset and run the training script."
+msgstr "Затем, можно указать обучаоющий набор конфигураций и запустить "
+"скрипт обучения."
+
+#: ../../intro.rst:33
+msgid "Quick Start"
+msgstr "Быстрый старт"
+
+#: ../../intro.rst:35
+msgid ""
+"There are two ways one can use the OrGAN library. Those users who don't "
+"have any specific requirements for the generated organization structures "
+"may find that the provided scripts (e.g., :file:`main.py`) are enough for"
+" them. Using command-line options, one can control some basic "
+"requirements to the generated organizations as well as neural network "
+"architectures and training process. This quick start gives some flavour "
+"of this scenario."
+msgstr ""
+"Есть два способа использования библиотеки OrGAN. При отсутствии каких-либо "
+"специфических требований для генерируемых организационных структур имеющихся "
+"скриптов (например, :file:`main.py`) будет достаточно. С использованием "
+"параметров командной строки можно контролировать основные требования к "
+"генерируемым конфигурациям, архитектурам используемых нейронных сетей "
+"и процессу обучения. Быстрый старт рассчитан на подобный сценарий."
+
+#: ../../intro.rst:42
+msgid ""
+"We assume that the OrGAN was successfully installed according to the "
+"instructions in the `Installation`_."
+msgstr ""
+"Предполагаем, что библиотека OrGAN успешно проинсталлирована согласно "
+"инструкциями раздела `Установка`_."
+
+#: ../../intro.rst:45
+msgid ""
+"The whole idea of OrGAN is that it can generate structures *similar* to "
+"the provided ones (presumably, created by experts). It means that in "
+"order to use the library one have to prepare an organization structure "
+"dataset. In order to simplify demonstration we include two demo datasets "
+"(for logistics department scenario and for sales and administration "
+"scenario). However, the datasets of organization structures are typically"
+" very small, therefore, before training the model one shoud augment the "
+"training dataset:"
+msgstr ""
+"Основная идея библиотеки OrGAN заключается в том, что он можен генерировать "
+"структуры *схожие* c используемыми при обучении (предположительно, созданными "
+"экспертами). Это значит, что для использования библиотеки необходимо "
+"подготовить обучающий набор организационных структур. Для упрощения "
+"демонстрации в репозиторий включены два набора (сценарий конфигурирования "
+"логистического отдела и сценарий конфигурирования административного отдела). "
+"Однако, поскольку как правило обучающие наборы в области организационных "
+"структур весьма малы, перед обучением модели необходимо дополнить "
+"обучающее множество:"
+
+#: ../../intro.rst:57
+msgid ""
+"This script will create 1000 organization samples in the :file:`data` "
+"directory, the dataset format is discussed in `Data`_."
+msgstr ""
+"Данный скрипт создаст 1000 образцов организационных структур в папке "
+" :file:`data`, формат обучающего множества описан в `Data`_."
+
+#: ../../intro.rst:60
+msgid "After that, one should start training by running :file:`main.py`:"
+msgstr "Затем, можно начинать обучения посредством запуска :file:`main.py`:"
+
+#: ../../intro.rst:66
+msgid ""
+"The script will periodically print the summary of validness and quality "
+"of the generated structures."
+msgstr ""
+"Скрипт будет время от времения выводить информацию о качестве "
+"генерируемых образцов."
+
+#: ../../intro.rst:71
+msgid "Usage Scenarios"
+msgstr "Сценарии использования"
+
+#: ../../intro.rst:74
+msgid "Script-Only"
+msgstr "Только скрипт"
+
+#: ../../intro.rst:76
+msgid ""
+"This scenario doesn't require programming (at least, to train OrGAN), "
+"however, it is limited to using only some generic pre-defined constrains "
+"on organizations and it is not possible to define custom constraints."
+msgstr ""
+"Данный сценарий не требует программирования (по крайней мере, обучение "
+"OrGAN), однако, он ограничен только использованием лишь "
+"предварительно определенных ограничений на организационные структуры и "
+"не позволяет использовать свои ограничения."
+
+#: ../../intro.rst:80
+msgid "Basically, the scenario is following:"
+msgstr "Сценарий имеет следующий вид:"
+
+#: ../../intro.rst:82
+msgid ""
+"Prepare the dataset of real examples of organization structures according"
+" to the data format specification (see `Data`_)."
+msgstr ""
+"Подготовьте набор (обучающее множество) реальных примеров организационных "
+"структур согласно спецификации формата данных (см. `Data`_)."
+
+#: ../../intro.rst:85
+msgid ""
+"If the number of samples is less than several thousands, augment the "
+"dataset using :file:`augment_dataset.py` scipt."
+msgstr ""
+"Если количество образцов меньше нескольких тысяч, дополните обучающее "
+"множество с использованием скрипта :file:`augment_dataset.py`."
+
+#: ../../intro.rst:88
+msgid ""
+"Train the OrGAN. Assuming that the dataset was placed into the "
+":file:`data` folder, training can be done by running the following "
+"script:"
+msgstr ""
+"Обучите OrGAN. Если обучающее множество помещено в папку :file:`data`, "
+"обучение может быть выполнено посредством выполнения следующего скрипта:"
+
+#: ../../intro.rst:96
+msgid ""
+"Note, that the training script :file:`main.py` is run with the argument '"
+"--rules=generic'. It means, that there are only generic requirements for "
+"the organization stuctures (e.g., that a link is possible only between "
+"existing units). You may also use other options of :file:`main.py` to "
+"control the process of training and output (see :command:`python main.py "
+"--help` for the list of options)."
+msgstr ""
+"Необходимо заметить, что обучающий скрипт :file:`main.py` запускается с "
+"аргументом '--rules=generic'. Это значит, что есть только общие требования "
+"к организационным структурам (например, связь может существовать только "
+"между существующими элементами). Также можно использовать команды "
+":file:`main.py` для управления процессами обучения и вывода (см. "
+":command:`python main.py --help` для списка команд)."
+
+#: ../../intro.rst:103
+msgid ""
+"You may find that generic rules in most cases are in fact too generic and"
+" the generated structures conforming to them are still not very useful. "
+"In this case, you can define arbitrary constraints (and metrics) for your"
+" organization structures using `Program-Level`_ scenario, but it requires"
+" a bit of coding."
+msgstr ""
+"Поскольку общие требования в большинстве случаев являются слишком общими, "
+"сгенерированные только с их использованием конфигурации могут далеко не "
+"всегда быть действительно полезными. В таком случае следует определить "
+"свои ограничения (и метрики) дял своих организационных структур с "
+"использованием сценария `Program-Level`_, однако он требует "
+"программирования."
+
+#: ../../intro.rst:110
+msgid "Program-Level"
+msgstr "Уровень программирования"
+
+#: ../../intro.rst:112
+msgid ""
+"All the specific requirements to organization structures are connected "
+"with the concept of an organization structure model. Such model is "
+"represented by a Python class, defining following methods:"
+msgstr ""
+"Все специфические требования к организационным структурам связаны "
+"понятием 'Модель организационной структуры' ('Organization structure "
+"model'). Данная модель представлена классом Python, определяющим "
+"следующие методы:"
+
+#: ../../intro.rst:116
+msgid ""
+"`validness(org) -> bool`, which checks the organization structure for "
+"validness,"
+msgstr ""
+"`validness(org) -> bool`, определяющей допустимость организационной "
+структуры,"
+
+#: ../../intro.rst:118
+msgid ""
+"`metrics(org) -> dict`, returning a dict with relevant organization "
+"metric values, and"
+msgstr ""
+"`metrics(org) -> dict`, возвращающей словарь метрик оценки качества "
+"организационной структуры и "
+
+#: ../../intro.rst:120
+msgid ""
+"optional `soft_constraints(nodes, edges, features, condition) -> tensor`,"
+" which can implement some differentiable contraints."
+msgstr ""
+"необязательный `soft_constraints(nodes, edges, features, condition) -> tensor`,"
+" который может реализовывать дифференцируемые ограничения."
+
+#: ../../intro.rst:123
+msgid ""
+"Having defined such class one can pass the class name as an argument for "
+"the training script:"
+msgstr ""
+"После определения такого класса можно передать имя класса в качестве аргумента "
+"скрипту обучения:"
+
+#: ../../intro.rst:130
+msgid ""
+"Let's illustrate the process of implementing a simplistic custom "
+"organization structure model. We can create a Python module "
+":file:`hornsnhooves.py` in the repository root folder and define "
+"`HNHStructureModel` class in it. As it was noted earlier, this class has "
+"to implement several methods."
+msgstr ""
+"Проиллюстрируем процесс создания упрощенной пользовательской модели "
+"организационной структуры. Создадим модуль Python "
+":file:`hornsnhooves.py` в корневой папке репозитория и определим в нем "
+"класс `HNHStructureModel`. Как было указано ранее, данный класс должен "
+"реализовывать несколько методов."
+
+#: ../../intro.rst:136
+msgid ""
+"Let's start from the most important one - `validness(org)`. This method "
+"can implement any checks of the organization structure (e.g., you can "
+"easily invoke some external system, do some simulation, or whatever seems"
+" resonable to ensure that the organization `org` is valid for you. Note, "
+"however, that this method is called for each organization (existing and "
+"generated), so you'll want to make it as efficient as possible."
+msgstr ""
+"Начнем с самого важного - `validness(org)`. Данный метод может выполнять "
+"любые проверки организационной структуры (например, можно вызывать "
+"внешние системы, выполнять моделирование или люьбые другие действия, "
+"которые могут быть необходимы для проверки того, что организационная "
+"структура `org` является допустимой. Однако, необходимо заметить, "
+"что данный метод вызывается для каждой конфигурации (как существующей, "
+"так и сгенерированной), так что его необходимо сделать максимально "
+"эффективным."
+
+#: ../../intro.rst:143
+msgid ""
+"The `org` parameter of this method is (currently) just a tuple - a pair "
+"of two matrices - one describing organization nodes (corresponds to node "
+"type in each position, zero if a position is empy), and the other one "
+"describing connections between nodes (edge type for each pair of node "
+"positions, zero if no edge)."
+msgstr ""
+"Параметр данного метода `org` является (в данной версии библиотеки) "
+"кортежем - парой двух матриц - одна описывает вершины конфигурации "
+"соответствует типу вершины на каждой позиции, 0 - если позиция пуста) "
+"а вторая - связи между вершинами (тип свзязи для каждой пары позиций "
+"вершин, 0 - если связи нет)."
+
+#: ../../intro.rst:151
+msgid "This will probably change in future releases."
+msgstr "Данное поведение может быть изменено в последующих релизах."
+
+#: ../../intro.rst:153
+msgid ""
+"For example, let's require that valid structures must contain at least 3 "
+"elements and must also contain either node of type 1, or type 2 (or both "
+"of them). Then, vaildness definition is following:"
+msgstr ""
+"Например, можно потребовать, чтобы допустимые конфигурации содержали не "
+"менее 3-х элементов и содержали либо вершину типа 1 или типа 2 (или обе). "
+"Тогда описание допустимости будет выглядеть слеюующим образом:"
+
+#: ../../intro.rst:164
+msgid ""
+"Then, we must define a set of metrics for organization structures. These "
+"metrics will be printed during the training process. Typically, such "
+"metrics characterize the validness and quality of the structure, so one "
+"of the metrics for `HNHStructureModel` might directly correspond to "
+"validness and the other just show the organization size:"
+msgstr ""
+"Затем, необходимо определить набор метрик оценки организационной "
+"структуры. Данные метрики будут выводиться в процессе обучения. Поскольку "
+"обычно такие метрики описывают допустимость и качество структуры, одна из "
+"метрик для `HNHStructureModel` может непосредственно соответствовать "
+"допустимости, а вторая - просто отображать ее размер:"
+
+#: ../../intro.rst:176
+msgid ""
+"Finally, we can add a number of differentiable soft constraints on the "
+"organization structures. The generator will be penalized for violating "
+"these constraints, so they are likely to be fulfilled (eventially), but "
+"it is not strictly guaranteed. As these constraints have to be "
+"differentiable, the interface of the `soft_constraints()` function is a "
+"bit different, it should accept an organization representation in an "
+"internal form (a couple of pytorch tensors), it can also use only "
+"differentiable functions (typically, from pytorch library). OrGAN defines"
+" a set of helper functions to assist in implementing `soft_constraints()`"
+" - see `organ.structure.constraints` module for the complete list. Let's,"
+" for example, require that the edges would be symmetric and an egde "
+"connect only existing nodes:"
+msgstr ""
+"Наконец, можно добавить несколько дифференцируемых ограничений на "
+"организационные структуры. Генератор будет штрафоваться за нарушение "
+"этих ограничений, так что они скорее всего рано или поздно будут "
+"удовлетворены, хотя это и не гарантируется. "
+"Поскольку данные ограничения должны быть "
+"дифференцируемыми, интерфейс функции `soft_constraints()` несколько "
+"отличен. Она должна принимать на вход представление организационной "
+"структуры во внутреннем формате (пара тензоров pytorch), а также может "
+"использовать только дифференцируемые функции (обычно, представленные "
+"в библиотеке pytorch). OrGAN определяет набор функций для помощи "
+"при реализации функции `soft_constraints()` - см. описание модуля "
+"`organ.structure.constraints` для получения полного списка. В качестве "
+"примера можно потребовать, чтобы связи были симметричными и соединяли "
+"только существующие вершины:"
+
+#: ../../intro.rst:197
+msgid ""
+"Typically you'll want that the set of valid structures would be a subset "
+"of the structures conforming the soft constraints. It is not the case in "
+"this example, but in practice should be."
+msgstr ""
+"Обычно требуется, чтобы набор допустимых структур был подмножеством "
+"структур, удовлетворяющих нечетким ограничениям. В данном примере это "
+"требование не представлено, но на практике вполне вероятно."
+
+#: ../../intro.rst:201
+msgid ""
+"In general, this function should return a non-negative penalty for the "
+"structure described by `nodes` and `edges` tensors. The penalty should be"
+" zero for a structure conforming to the requirements."
+msgstr ""
+"Обычно, данная функция должна возвращать неотрицательно значение штрафа "
+"для структур описанныз тензорами `nodes` (`вершины`) и `edges` (`связи`). "
+"Штраф должен быть нулевым, если требование выполняется."
+
+#: ../../intro.rst:206
+msgid "TiNGLe"
+msgstr "TiNGLe"
+
+#: ../../intro.rst:208
+msgid ""
+"For the most demanding users and use cases, OrGAN includes a Tiny Neural "
+"Graph Library (TiNGLe), providing a set of abstractions and tools to "
+"program (convolutional) graph neural networks and use them as custom "
+"approximators and discriminators for OrGAN."
+msgstr ""
+"Для наиболее требовательных пользователей и сценариев использования "
+"библиотеки OrGAN включает библиотеку Tiny Neural Graph Library (TiNGLe), "
+"предоставлюящую набор абстракций и средств для программирования "
+"(сверточных) графовых нейронных сетей и их использования в качестве "
+"собственных аппроксиматоров и дискриминаторов в рамках OrGAN."
+
+#: ../../intro.rst:213
+msgid ""
+"The TiNGLe supports graphs having several types of nodes and edges, and "
+"uses graph representation most convenient for the generation process, "
+"representing graph connectivity by an adjacency matrix (and the presense "
+"of an edge is not binary, it can be on the continuum from zero to one, "
+"which is important for gradient flow). Conceptually, the library follows "
+"message passing framework for graph neural networks and is based on the "
+"ideas, described in https://distill.pub/2021/gnn-intro/. More precisely, "
+"a graph is represented using the following components:"
+msgstr ""
+"TiNGLe поддерживает графы с несколькими типами вершин и связей и "
+"использует наиболее удобное с точки зрения процессов генерации "
+"представление графа в виде матрицы связности (так что существование "
+"ребра является не бинарным, а оцениваевым от 0 до 1, что важно для "
+"формирования градиента). С концептуальной точки зрения библиотека "
+"соответствует модели передачи сообщений (message passing framework) "
+"для графовых нейронных сетей и основана на идеях, описанных в "
+"https://distill.pub/2021/gnn-intro/. Граф представлен с помощью "
+"следующих компонентов:"
+
+#: ../../intro.rst:223
+msgid "global representation (one vector, describing graph as a whole);"
+msgstr "глобальное представление (один вектор, описывающий весь граф);"
+
+#: ../../intro.rst:224
+msgid ""
+"nodes representation. In TiNGLe it is assumed, that a node can have a "
+"type, besides, it can also have some set of features, so:"
+msgstr ""
+"представление вершин. В TiNGLe предполагается, что вершина может "
+"быть определенного типа, а также иметь набор свойств, так что:"
+
+#: ../../intro.rst:227
+msgid "node types (batch x nodes x node_types);"
+msgstr "типы вершин (размер батча x число вершин x число типов вершин);"
+
+#: ../../intro.rst:228
+msgid "node features (batch x nodes x N_F);"
+msgstr "свойства вершин (размер батча x число вершин x число свойств (N_F))"
+
+#: ../../intro.rst:230
+msgid ""
+"edges representation. Edges can also be of multiple types, however, "
+"between a pair of nodes it is not possible to have more than one edge:"
+msgstr ""
+"представление связей. Связи могут быть нескольких типов, но между одной "
+"парой вершин нельзя определить более одной связи:"
+
+#: ../../intro.rst:234
+msgid ""
+"edge types (batch x edge_types x nodes x nodes). In this representation, "
+"0 means that there is no edge of the respective type, and 1 - that there "
+"is. However, other values are also possible - they are interpreted as a "
+"\"power\" of connection and are used during the propagation through (or "
+"from) the respective edge."
+msgstr ""
+"типы связей (размер батча x число типов связей x число вершин x число вершин). "
+"В данном представлении 0 означает отсутствие связи соответствующего типа, а 1 - "
+"наличие таковой. Однако, другие значения также возможны. Они интерпретируются "
+"как \"сила\" связи и используются во время распространения через (или из) "
+"соответствующей связи."
+
+#: ../../intro.rst:240
+msgid ""
+"edge representation (one for all types of edges) (batch x nodes x nodes x"
+" V_F)."
+msgstr "представление связи (одно для всех типов связей "
+"(размер батча x число вершин x число вершин x V_F)."
+
+#: ../../intro.rst:243
+msgid "The library defines two types of tools:"
+msgstr "Библиотека определяет два вида инструментов:"
+
+#: ../../intro.rst:245
+msgid ""
+"Functions to implement collection and aggragation steps for various kinds"
+" of message passing."
+msgstr ""
+"Функции для реализации шагов сбора и агрегирования для различных видов "
+"передачи сообщений."
+
+#: ../../intro.rst:247
+msgid ""
+"Classes and \"orchestration\" tools to compose the architecture of a "
+"complete graph neural network."
+msgstr ""
+"Классы и инструменты \"оркестровки\" для создания архитектуры полной "
+"графовой нейронной сети."
+
+#: ../../intro.rst:250
+msgid "As a result, one can build graph neural networks in the following way:"
+msgstr "В результат можно создать нейронную сеть следующим образом:"
+
+#: ../../intro.rst:261
+msgid ""
+"For more information about TiNGLe and its API, please, refer to the "
+"library documentation."
+msgstr ""
+"Более подробная информация о библиотеке TiNGLe и ее API "
+"представлены в ее документации."
+
+#: ../../intro.rst:265
+msgid "Data"
+msgstr "Данные"
+
+#: ../../intro.rst:267
+msgid ""
+"Currently, OrGAN uses binary datasets. There are, however, plans to "
+"provide conversion tools from popular graph exchange formats to this "
+"binary format and we would welcome such contributions."
+msgstr ""
+"В натоящей версии библиотека OrGAN использует бинарные наборы данных. "
+"Однако в дальнейшем планируется предоставить средства перевода данных "
+"из популярных форматов описания графов в данное представление. "
+"Помощь в создании таких средств приветствуется."
+
+#: ../../intro.rst:271
+msgid ""
+"Each organization structure is described by a graph. Its nodes correspond"
+" to organization units, and edges correspond to connections between "
+"units."
+msgstr ""
+"Каждая организационная структура описываеься графом. Его вершины "
+"соответствуют элемантам организационной структуры, а ребра - связям "
+"между ними."
+
+#: ../../intro.rst:274
+msgid ""
+"The dataset consists of a set of files with fixed names residing in one "
+"folder:"
+msgstr ""
+"Набор данных состоит из нескольких файлов с фиксированными именами, "
+"находящимися в одной папке:"
+
+#: ../../intro.rst:277
+msgid ""
+":file:`data_nodes.npy` - an integer (n, f) NumPy matrix with nodes "
+"description,"
+msgstr ""
+":file:`data_nodes.npy` - целочисленная матрица NumPy (n, f) с описанием "
+"вершин,"
+
+#: ../../intro.rst:278
+msgid ""
+":file:`data_edges.npy` - an integer (n, f, f) NumPy matrix with edge "
+"description,"
+msgstr ""
+":file:`data_edges.npy` - целочисленная NumPy матрица (n, f, f) с "
+"описанием связей,"
+
+#: ../../intro.rst:279
+msgid ":file:`data_staff.npy` - a float (n, f) NumPy matrix with node features,"
+msgstr ":file:`data_staff.npy` - матрица Numpy (n, f) типа float, описывающая "
+"параметры вершин,"
+
+#: ../../intro.rst:280
+msgid ""
+":file:`data_cond.npy` - a float (n, f) NumPy matrix with condition value "
+"(organization context to use as input for the generation),"
+msgstr ""
+":file:`data_cond.npy` - матрица Numpy (n, f) типа float, описывающая "
+"входные значения (condition values) - организационный контекст, используемый "
+"для генерации конфигураций,"
+
+#: ../../intro.rst:282
+msgid ""
+":file:`data_meta.pkl` - a pickle file, containing a dict with the dataset"
+" description."
+msgstr ""
+":file:`data_meta.pkl` - фойл pickle, содержащий словарь с описанием набора "
+"данных."
+
+#: ../../intro.rst:285
+msgid ""
+"All :file:`.npy` files are in a standard NumPy binary format. In the "
+"description above, `n` is the number of samples in the dataset, `f` is "
+"the number of types of nodes (and, at the same time, maximal number of "
+"nodes, because we assume that an organization structure can contain at "
+"most one unit of some type)."
+msgstr ""
+"Все файлы :file:`.npy` имеют стандартный формат NumPy binary. В описаннии "
+"выше, `n` является числом элементов наьбора данных, `f` - "
+"числом типов вершин (и в то же время максимальным числом вершин, так как "
+"предполагается, что организационная структура содержит не более одной "
+"вершины каждого типа)."
+
+#: ../../intro.rst:290
+msgid ""
+"Due to historical reasons, *i*-th position of the nodes description can "
+"contain only *i* or 0. Zero at the *i*-th position means that there are "
+"no node with type *i* in the respective graph."
+msgstr ""
+"*i*-я позиция описания вершин может содержать либо "
+"contain*i*, либо 0. Ноль в позиции *i* означает, что вершины "
+"типа *i* в графе нет."
+
+#: ../../intro.rst:294
+msgid ""
+"Similarly, each value of the multidimensional array in "
+":file:`data_edges.npy` encodes the type of link between two nodes, where "
+"0 means there is no such link. Note, that according to this format there "
+"cannot be more than one link (e.g., links of different types) between a "
+"couple of nodes."
+msgstr ""
+"Аналогично, каждое значение многомерного массива в "
+":file:`data_edges.npy` кодирует связь между двумя вершинами, где "
+"0 означает отсутствие связи. Необходимо отметить, что согласно данному "
+"формату не может быть более одной связи (например, связей разного типа) "
+"между парой вершин."
+
+#: ../../intro.rst:299
+msgid ""
+"In the features file, for each node there is one value (e.g., "
+"corresponding to the scale of this unit)."
+msgstr ""
+"В файле параметров каждой вершине соответствует одно значение (например, "
+"соответствующее масштабу данной вершины)."
+
+#: ../../intro.rst:302
+msgid "Dict with dataset description contains a number of keys:"
+msgstr "Словарь описания набора данных, содержащий следующие ключи:"
+
+#: ../../intro.rst:304
+msgid "for `X` in ('train', 'validation, or 'test'):"
+msgstr "для `X` в ('train', 'validation, or 'test'):"
+
+#: ../../intro.rst:306
+msgid "`X_idx` - a list with subset indices,"
+msgstr "`X_idx` - список индекстов подмножеств,"
+
+#: ../../intro.rst:307
+msgid "`X_count` - number of samples in `X_idx`,"
+msgstr "`X_count` - число образцов в `X_idx`,"
+
+#: ../../intro.rst:308
+msgid "`X_counter` - must be zero,"
+msgstr "`X_counter` - должен быть нулевым,"
+
+#: ../../intro.rst:310
+msgid ""
+"`node_num_types` - number of node types (including 0-type), must be (`f` "
+"- 1),"
+msgstr ""
+"`node_num_types` - число типов вершин (включая тип 0), должно быть (`f` "
+"- 1),"
+
+#: ../../intro.rst:311
+msgid "`edge_num_types` - number of edge types (including 0-type),"
+msgstr "`edge_num_types` - число типов связей (включая тип 0),"
+
+#: ../../intro.rst:312
+msgid "`vertexes` - must be equal to `node_num_types`,"
+msgstr "`vertexes` - должен быть равен `node_num_types`,"
+
+#: ../../intro.rst:313
+msgid "`features_per_node` - number of feartures per node,"
+msgstr "`features_per_node` - число свойств для вершин,"
+
+#: ../../intro.rst:314
+msgid ""
+"`condition_dim` - number of features representing the generation context "
+"(goal organization parameters)."
+msgstr ""
+"`condition_dim` - число свойств, определающих организационный контекст "
+"(параметры целевой конфигурации организационной структуры)."

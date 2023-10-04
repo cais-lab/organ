@@ -1,0 +1,4 @@
+numpy>=1.19.5
+torch>=1.8.1
+pytest==7.0.1
+coverage==6.2

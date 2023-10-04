@@ -1,0 +1,1557 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, OrGAN authors
+# This file is distributed under the same license as the OrGAN package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OrGAN 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-25 11:27+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../modules.rst:2
+msgid "OrGAN Modules"
+msgstr ""
+
+#: ../../modules.rst:5
+msgid "solver"
+msgstr ""
+
+#: ../../docstring of organ.solver:1
+msgid "Main module for training and testing of the OrGAN."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver:1
+msgid "Class for training and testing the OrGAN model."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.build_model:1
+msgid "Create neural models (generator, discriminator, and approximator)."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.build_tensorboard:1
+msgid "Tensorboard logging initialization."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate:1
+msgid "Generate a batch of samples."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.metrics
+#: organ.demo.LogisticsDepartmentModel.validness
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_nodes
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.pack_to_ctx
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.unpack_ctx
+#: organ.demo.ManagementModel.metrics
+#: organ.demo.ManagementModel.soft_constraints
+#: organ.demo.ManagementModel.validness
+#: organ.demo.ManagementStructureModel.check_children
+#: organ.demo.ManagementStructureModel.check_nodes
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility
+#: organ.demo.ManagementStructureModel.check_relations
+#: organ.demo.ManagementStructureModel.check_uniqueness
+#: organ.demo.ManagementStructureModel.generate_augmentation
+#: organ.demo.ManagementStructureModel.generate_key_values
+#: organ.demo.ManagementStructureModel.generate_values
+#: organ.layers.EdgeConvolution.forward organ.layers.GraphAggregation.forward
+#: organ.layers.cartesian organ.models.CPDiscriminator.forward
+#: organ.models.Discriminator.forward organ.models.SimpleGenerator.forward
+#: organ.solver.Solver.generate organ.solver.Solver.generate_valid
+#: organ.solver.Solver.label2onehot organ.solver.Solver.postprocess
+#: organ.solver.Solver.postprocess_nodes organ.solver.Solver.print_network
+#: organ.solver.Solver.restore_model organ.solver.Solver.reward
+#: organ.solver.Solver.update_lr organ.structure.constraints.edge_consistent
+#: organ.structure.constraints.edge_symmetric organ.tingle.ev_collect_aggregate
+#: organ.tingle.ve_collect_aggregate organ.tingle.vv_collect_aggregate
+msgid "Parameters"
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate:3
+msgid "Number of samples to generate."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate:5
+msgid "Context for the samples to be generated. May be optional."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate_valid:1
+msgid "Generate valid organizations."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate_valid:3
+msgid "The number of valid organizations to generate."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate_valid:5
+msgid "Condition (context) features, (n_features, )."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate_valid:7
+msgid ""
+"Maximal number of instances to generate. If the underlying model accuracy"
+" is low, it may take too much time to generate the required number of "
+"valid organizations. This parameter helps to control the process and stop"
+" generation even if the required count isn't achieved."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.metrics
+#: organ.demo.LogisticsDepartmentModel.validness
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_nodes
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.pack_to_ctx
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.unpack_ctx
+#: organ.demo.ManagementModel.metrics
+#: organ.demo.ManagementModel.soft_constraints
+#: organ.demo.ManagementModel.validness
+#: organ.demo.ManagementStructureModel.check_children
+#: organ.demo.ManagementStructureModel.check_nodes
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility
+#: organ.demo.ManagementStructureModel.check_relations
+#: organ.demo.ManagementStructureModel.check_uniqueness
+#: organ.demo.ManagementStructureModel.generate_augmentation
+#: organ.demo.ManagementStructureModel.generate_key_values
+#: organ.demo.ManagementStructureModel.generate_values
+#: organ.layers.EdgeConvolution.forward organ.layers.GraphAggregation.forward
+#: organ.layers.cartesian organ.models.SimpleGenerator.forward
+#: organ.solver.Solver.generate_valid organ.solver.Solver.label2onehot
+#: organ.solver.Solver.postprocess organ.solver.Solver.postprocess_nodes
+#: organ.solver.Solver.reward organ.structure.constraints.edge_consistent
+#: organ.structure.constraints.edge_symmetric organ.tingle.ev_collect_aggregate
+#: organ.tingle.ve_collect_aggregate organ.tingle.vv_collect_aggregate
+msgid "Returns"
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.generate_valid:14
+msgid ""
+"The list of organizations, containing not more than `n` instances of "
+"`Organization` class."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.metrics
+#: organ.demo.LogisticsDepartmentModel.validness
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_nodes
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.pack_to_ctx
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.unpack_ctx
+#: organ.demo.ManagementModel.metrics
+#: organ.demo.ManagementModel.soft_constraints
+#: organ.demo.ManagementModel.validness
+#: organ.demo.ManagementStructureModel.check_children
+#: organ.demo.ManagementStructureModel.check_nodes
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility
+#: organ.demo.ManagementStructureModel.check_uniqueness
+#: organ.demo.ManagementStructureModel.generate_augmentation
+#: organ.demo.ManagementStructureModel.generate_key_values
+#: organ.demo.ManagementStructureModel.generate_values
+#: organ.layers.EdgeConvolution.forward organ.layers.GraphAggregation.forward
+#: organ.layers.cartesian organ.models.SimpleGenerator.forward
+#: organ.solver.Solver.generate_valid organ.solver.Solver.label2onehot
+#: organ.solver.Solver.postprocess organ.solver.Solver.postprocess_nodes
+#: organ.solver.Solver.reward organ.structure.constraints.edge_consistent
+#: organ.structure.constraints.edge_symmetric organ.tingle.ev_collect_aggregate
+#: organ.tingle.ve_collect_aggregate organ.tingle.vv_collect_aggregate
+msgid "Return type"
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.gradient_penalty:1
+msgid "Gradient penalty."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.gradient_penalty:3
+msgid "(L2_norm(dy/dx) - 1)**2"
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.label2onehot:1
+msgid "Transform labels into one-hot encoded vectors."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.label2onehot:3
+msgid ""
+"Given tensor with integer values `labels` is extended by one dimensions, "
+"in which these labels are converted into one-hot codes."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.label2onehot:7
+msgid "Tensor with non-negative integer labels."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.label2onehot:9
+msgid ""
+"Number of categories in `labels` tensor. This number becomes the size of "
+"the new dimension of the output tensor. The specified number must be "
+"greater than the max value of `labels`."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.label2onehot:15
+msgid "Real-valued tensor, consisting of zeros and ones."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.load_pretrained:1
+msgid "Load pretrained models."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess:1
+msgid "Postprocessing by one of the differentiable discretization methods."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess:3
+msgid ""
+"The method is used to transform matrices, describing edges of a graph "
+"(without activations) to a representation, where an edge can have only "
+"one type (or be marked as absent). In other words, the representation is "
+"transformed into one, consisting of ones and zeroes (almost)."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess:9
+msgid "Input tensors to transform."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess:11
+msgid "Transformation type: `soft_gumbel`, `hard_gumbel`, `softmax`."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess:14
+msgid "Transformation parameter."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess:17
+msgid ""
+"The list of output tensors, with transformation applied to the last "
+"dimension. If `inputs` was one tensor, the result is still a list, though"
+" one-element."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess_nodes:1
+msgid "Transforms a list of node logits into richer form."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess_nodes:3
+msgid ""
+"Most code assumes, that the set of graph nodes is described by tensor "
+"vertexes x node_types. However, in the case of organization structures it"
+" turns out that a node and a node type are mostly synonyms (there can be "
+"at most one node of a given type). Therefore, generator returns only "
+"logits of presence of certain types of nodes, and this method transforms "
+"these logits into batch of vertex x node_types tensors, placing the "
+"values on diagonal and complementing the probability of node absence."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess_nodes:13
+msgid "Batch of logits for node presence, batch x vertexes."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.postprocess_nodes:17
+msgid "Batch of specifications batch x vertexes x nodes."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.print_network:1
+msgid "Print model description."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.print_network:3
+msgid "Model to print."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.print_network:5
+msgid "Model name (only for readability purposes)."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.reset_grad:1
+msgid "Reset gradients of all optimizers."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.restore_model:1
+msgid "Load models from a savepoint."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.restore_model:3
+msgid ""
+"Load the state of all models (generator, discriminator, and approximator)"
+" from a savepoint, located at `model_save_dir`."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.restore_model:6
+msgid "Iteration number, to specify a model savepoint."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.reward:1
+msgid "Structural reward."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.reward:3
+msgid ""
+"The method calculates a vector of structural reward values for the given "
+"batch of organization descriptions. The definition of structural reward "
+"can be project-specific (the list of metrics is defined in `self.metric`)"
+" and relies on various metrics defined in `org_model` passed to the "
+"constructor."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.reward:10
+msgid "A list of organization specifications."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.reward:13
+msgid "Batch of reward values."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.sample_z:1
+msgid "Form samples from the input distribution of the generator."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.test:1
+msgid "Model testing."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.train:1
+msgid "Training cycle."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.update_lr:1
+msgid "Sets learning rate constants (for all the models)."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.update_lr:3
+msgid "Learning rate for the generator (and approximator)."
+msgstr ""
+
+#: ../../docstring of organ.solver.Solver.update_lr:5
+msgid "Learning rate for the discriminator."
+msgstr ""
+
+#: ../../modules.rst:11
+msgid "models"
+msgstr ""
+
+#: of organ.models:1
+msgid "Neural models OrGAN is built of."
+msgstr ""
+
+#: of organ.models:3
+msgid ""
+"This module defines several flavours of basic generator and discriminator"
+" neural networks."
+msgstr ""
+
+#: of organ.models:6
+msgid "You can as well define your own generator and discriminator architectures."
+msgstr ""
+
+#: of organ.models:9
+msgid ""
+"Both generator and discriminator must be PyTorch modules (derive from "
+"`torch.nn.Module`)."
+msgstr ""
+
+#: of organ.models:12
+msgid "Generator's `forward()` method has to accept two positional parameters:"
+msgstr ""
+
+#: of organ.models:15
+msgid ""
+"`condition` (`torch.tensor` of shape (batch, cond_dim) or ``None``) with "
+"input condition (requirements to the sample to be generated). If a "
+"generator model doesn't support conditional generation it may ignore this"
+" parameter;"
+msgstr ""
+
+#: of organ.models:19
+msgid "`x` (`torch.tensor` of shape (batch, z_dim)) with input noise."
+msgstr ""
+
+#: of organ.models:22
+msgid "and return a 3-tuple:"
+msgstr ""
+
+#: of organ.models:24
+msgid "edges specification (batch, nodes, nodes, edge_types);"
+msgstr ""
+
+#: of organ.models:25
+msgid "nodes specification (batch, nodes, node_types);"
+msgstr ""
+
+#: of organ.models:26
+msgid "optional node parameters (batch, nodes, node_features)."
+msgstr ""
+
+#: of organ.models:28
+msgid "Discriminator's `forward()` method has to accept following parameters:"
+msgstr ""
+
+#: of organ.models:31
+msgid ""
+"`edges` (`torch.tensor` of shape (batch, nodes, nodes, edge_types)) - "
+"adjacency matrices;"
+msgstr ""
+
+#: of organ.models:33
+msgid ""
+"`nodes` (`torch.tensor` of shape (batch, nodes, node_types)) - types of "
+"nodes;"
+msgstr ""
+
+#: of organ.models:35
+msgid ""
+"`node_params` (`torch.tensor` of shape (batch, nodes, node_features) or "
+"``None``) - parameters of each node. If the discriminator doesn't support"
+" parameters it may ignore this parameter;"
+msgstr ""
+
+#: of organ.models:39
+msgid ""
+"`condition` (`torch.tensor` of shape (batch, condition_features) or "
+"``None``) - condition, under which the graph was generated. If the "
+"discriminator doesn't support conditional generation it may ignore this "
+"parameter;"
+msgstr ""
+
+#: of organ.models:44
+msgid "`activation` - an activation function to apply to the results."
+msgstr ""
+
+#: of organ.models.CPDiscriminator:1
+msgid "Conditional parametric discriminator for OrGAN."
+msgstr ""
+
+#: of organ.models.CPDiscriminator:3
+msgid ""
+"Discriminator receives a graph (described by edges, nodes, node features "
+"and condition), applies a series of graph convolutions and fully "
+"connected layers to obtain a single number (characterizing the graph as a"
+" whole, e.g., its consistency or verisimilitude)."
+msgstr ""
+
+#: of organ.layers.EdgeConvolution.forward:1
+#: organ.layers.GraphAggregation.forward:1
+#: organ.layers.GraphConvolution.forward:1
+#: organ.models.CPDiscriminator.forward:1 organ.models.CPGenerator.forward:1
+#: organ.models.Discriminator.forward:1
+#: organ.models.EdgeAwareGenerator.forward:1
+#: organ.models.SimpleGenerator.forward:1 organ.tingle.EV.forward:1
+#: organ.tingle.GNNBlock.forward:1 organ.tingle.VE.forward:1
+#: organ.tingle.VV.forward:1
+msgid "Forward pass."
+msgstr ""
+
+#: of organ.models.CPDiscriminator.forward:3
+#: organ.models.Discriminator.forward:3
+msgid "Adjacency matrices, batch x vertexes x vertexes x edges."
+msgstr ""
+
+#: of organ.models.CPDiscriminator.forward:5
+#: organ.models.Discriminator.forward:5
+msgid "Nodes specification, batch x vertexes x nodes."
+msgstr ""
+
+#: of organ.models.CPDiscriminator.forward:7
+msgid "Node parameter values, batch x vertexes x node_features."
+msgstr ""
+
+#: of organ.models.CPDiscriminator.forward:9
+msgid "Condition, batch x cond_features."
+msgstr ""
+
+#: of organ.models.CPDiscriminator.forward:11
+#: organ.models.Discriminator.forward:8
+msgid "Activation function for the last layer."
+msgstr ""
+
+#: of organ.models.CPGenerator:1
+msgid "Conditional parametric generator."
+msgstr ""
+
+#: of organ.models.Discriminator:1
+msgid "Discriminator for OrGAN."
+msgstr ""
+
+#: of organ.models.Discriminator:3
+msgid ""
+"Discriminator receives a graph (described by edges and nodes), applies a "
+"series of graph convolutions and fully connected layers to obtain a "
+"single number (characterizing graph as a whole, e.g., its consistency or "
+"verisimilitude)."
+msgstr ""
+
+#: of organ.models.Discriminator:9
+msgid ""
+"This discriminator *does NOT* support conditional generation and "
+"parametric organizations. For such full-fledged disciminator see "
+"`CPDiscriminator`."
+msgstr ""
+
+#: of organ.models.Discriminator.forward:7
+msgid "Ignored."
+msgstr ""
+
+#: of organ.models.EdgeAwareGenerator:1
+msgid "Generator that creates edges based on types of nodes."
+msgstr ""
+
+#: of organ.models.EdgeAwareGenerator:4
+msgid ""
+"This generator *does NOT* support conditional generation and parametric "
+"organizations. For such full-fledged generator see `CPGenerator`."
+msgstr ""
+
+#: of organ.models.FCBlock:1
+msgid "A fully-connected block."
+msgstr ""
+
+#: of organ.models.SimpleGenerator:1
+msgid "Generator network for OrGAN."
+msgstr ""
+
+#: of organ.models.SimpleGenerator:3
+msgid ""
+"Generator is a non-linear neural transformation from an input vector "
+"(consisting of `z_dim` features) to a graph, describing an organization "
+"structure."
+msgstr ""
+
+#: of organ.models.SimpleGenerator:7
+msgid ""
+"The generator is built of several fully connected layers, making a series"
+" of transformations, followed by \"forking\" the representation into "
+"nodes description and adjacency matrix::"
+msgstr ""
+
+#: of organ.models.SimpleGenerator.forward:4
+msgid "Output values are not bounded, activation is not applied."
+msgstr ""
+
+#: of organ.models.SimpleGenerator.forward:6
+msgid "Input tensor of batch x z_dim."
+msgstr ""
+
+#: of organ.models.SimpleGenerator.forward:9
+msgid ""
+"A tuple, consisting of edges specification (batch x vertexes x vertexes x"
+" edges) and nodes specification (batch x vertexes). It is assumed, that a"
+" vertex of certain type can be placed only in certain position (overall, "
+"vertex type is equivalent to its position), therefore, it is enough to "
+"form only presence of a node in certain position, its type is known "
+"automatically."
+msgstr ""
+
+#: ../../modules.rst:17
+msgid "layers"
+msgstr ""
+
+#: of organ.layers:1
+msgid ""
+"Definition of neural network layers, used in the generative adversarial "
+"network OrGAN."
+msgstr ""
+
+#: of organ.layers:4
+msgid ""
+"The module includes the definition of graph convolution layer, graph "
+"aggregation (to aggregate several node representations into one vector), "
+"and edge convolution."
+msgstr ""
+
+#: of organ.layers:9
+msgid ""
+"This module is deprecated and in future releases it will be replaced by "
+"the Tiny Neural Graph Library (organ.tingle)."
+msgstr ""
+
+#: of organ.layers.EdgeConvolution:1
+msgid "Edge convolution layer."
+msgstr ""
+
+#: of organ.layers.EdgeConvolution.forward:3
+msgid "Batch of nodes representations (batch x nodes x node_dim)."
+msgstr ""
+
+#: of organ.layers.EdgeConvolution.forward:6
+msgid "Adjacency matrix (batch x edge_types x nodes x nodes)."
+msgstr ""
+
+#: of organ.layers.EdgeConvolution.forward:10
+msgid "New node representations (batch x nodes x out_dim)."
+msgstr ""
+
+#: of organ.layers.GraphAggregation:1
+msgid "Aggregation of node descriptions."
+msgstr ""
+
+#: of organ.layers.GraphAggregation:3
+msgid ""
+"The layer aggregates nodes descriptions into a global graph "
+"representation vector. The implemented aggregation is done in the "
+"following way. There are two representations of the nodes (n_nodes x "
+"in_features and n_nodes x m_dim). They are concetenated (outside this "
+"class), and after that several non-linear transformations are applied to "
+"the result of this concatenation, so that in is mapped into new feature "
+"space (out_features), the results are multiplied and then summed for all "
+"the nodes."
+msgstr ""
+
+#: of organ.layers.GraphAggregation:12
+msgid ""
+"It is used in the following way: during graph convolution new node "
+"representations are obtained for each node. This representation is "
+"concatenated with the original one (outside this class) and then is "
+"transformed into one vector using this class."
+msgstr ""
+
+#: of organ.layers.GraphAggregation:18
+msgid ""
+"TODO (hatter): I think, this class is not very logical - the constructor "
+"receives the dimensions of two (aggregated) representations, but "
+"`forward()` receives only one (concatenated) tensor. One should either do"
+" concatenation, or construct a layer with the concatenated dimension "
+"size."
+msgstr ""
+
+#: of organ.layers.GraphAggregation.forward:3
+msgid "Concatenated nodes representation batch x n_nodes x (in_features + m_dim)."
+msgstr ""
+
+#: of organ.layers.GraphAggregation.forward:6
+msgid "Activation function for the aggregated representation."
+msgstr ""
+
+#: of organ.layers.GraphAggregation.forward:9
+msgid "Aggregated (global) graph representation batch x out_features"
+msgstr ""
+
+#: of organ.layers.GraphConvolution:1
+msgid "Graph convolution layer."
+msgstr ""
+
+#: of organ.layers.GraphConvolution:3
+msgid ""
+"In the original MolGAN paper (https://arxiv.org/pdf/1805.11973.pdf) it is"
+" proposed to use Relational GCN, (https://arxiv.org/pdf/1703.06103.pdf), "
+"however, this class implements a usual GCN. Difference is following:"
+msgstr ""
+
+#: of organ.layers.GraphConvolution:8
+msgid ""
+"parameters of the graph convoltion are the same for all edge types (in "
+"R-GCN they may be different);"
+msgstr ""
+
+#: of organ.layers.GraphConvolution:10
+msgid ""
+"in R-GCN components, corresponding to different kinds of edges are "
+"normalized (the paper discusses several types of such normalization), it "
+"is not done here."
+msgstr ""
+
+#: of organ.layers.GraphConvolution:14
+msgid ""
+"In practice, this class implements a block, consisting of two "
+"convolutions (referred to as hidden and output)."
+msgstr ""
+
+#: of organ.layers.cartesian:1
+msgid "Obtain descriptions for each pair of indices."
+msgstr ""
+
+#: of organ.layers.cartesian:3
+msgid ""
+"Calculates two n x n tensors with node descriptions - the first one "
+"corresponds to the row node, the second one to the column node. Based on "
+"this pair, one can implement various ways of aggregating the "
+"representations of nodes, incident to one edge - concatenate, subtract, "
+"etc."
+msgstr ""
+
+#: of organ.layers.cartesian:10
+msgid "Batch of vertex descriptions (..., vertexes, k)."
+msgstr ""
+
+#: of organ.layers.cartesian:13
+msgid "Resulting tensors of the shape (..., vertexes, vertexes, k)."
+msgstr ""
+
+#: ../../modules.rst:23
+msgid "structure.constraints"
+msgstr ""
+
+#: of organ.structure.constraints:1
+msgid "Some generic differentiable constraints on structures."
+msgstr ""
+
+#: of organ.structure.constraints.edge_consistent:1
+msgid "Penalizes edges incident to non-existing nodes."
+msgstr ""
+
+#: of organ.structure.constraints.edge_consistent:3
+msgid ""
+"The constraint that the function is enforcing is :math:`y_{ij} <= x_i * "
+"x_j`, where :math:`x_i, x_j` is presence of a node in respective "
+"locations, and :math:`y_{ij}` is presence of an edge."
+msgstr ""
+
+#: of organ.structure.constraints.edge_consistent:8
+msgid "As a penalty, this is transformed to:"
+msgstr ""
+
+#: of organ.structure.constraints.edge_consistent:14
+msgid ""
+"Batch of node descriptions (batch, nodes, f). Assumes that sum across the"
+" last dimension is 1 and node type 0 is the absence of a node."
+msgstr ""
+
+#: of organ.structure.constraints.edge_consistent:18
+msgid ""
+"Batch of edge descriptions (batch, nodes, nodes, edge_types). Assumes "
+"that the sum across the last dimension is 1 and edge type 0 is the "
+"absence of an edge."
+msgstr ""
+
+#: of organ.structure.constraints.edge_consistent:24
+msgid "Penalty for edge inconsistence."
+msgstr ""
+
+#: of organ.structure.constraints.edge_symmetric:1
+msgid "Penalizes non-symmetric edges."
+msgstr ""
+
+#: of organ.structure.constraints.edge_symmetric:3
+msgid "Batch of edge descriptions (batch, nodes, nodes, edge_types)."
+msgstr ""
+
+#: of organ.structure.constraints.edge_symmetric:7
+msgid "Penalty for non-symmetric adjecency matrix."
+msgstr ""
+
+#: ../../modules.rst:29
+msgid "utils"
+msgstr ""
+
+#: of organ.utils:1
+msgid "Functions and classes for organization metrics calculation."
+msgstr ""
+
+#: of organ.utils.MetricsAggregator:1
+msgid ""
+"Collects and aggragates validity and quality metrics of the generated "
+"organization structures."
+msgstr ""
+
+#: of organ.utils.MetricsAggregator:4
+msgid ""
+"Organizations are defined by a tuple: - Numpy vector of node types, - "
+"Numpy matrix of edge types."
+msgstr ""
+
+#: of organ.utils.OrganizationMetrics:1
+msgid "Utility functions to calculate organization quality and validity metrics."
+msgstr ""
+
+#: of organ.utils.OrganizationMetrics:4
+msgid ""
+"Organizations are defined by a tuple: - vector of node types, - matrix of"
+" edge types."
+msgstr ""
+
+#: of organ.utils.OrganizationMetrics.edge_validness_scores:1
+msgid "Estimates egde validness for multiple organizations."
+msgstr ""
+
+#: of organ.utils.OrganizationMetrics.node_validness_scores:1
+msgid "Estimates node validness for multiple organizations."
+msgstr ""
+
+#: ../../modules.rst:35
+msgid "TiNGLe"
+msgstr ""
+
+#: of organ.tingle:1
+msgid "Tiny Neural Graph Library (TiNGLe)."
+msgstr ""
+
+#: of organ.tingle:3
+msgid ""
+"This module defines a set of abstractions and functions to program graph "
+"neural networks (and graph convolutional networks), primarily to be used "
+"as the approximator and the discriminator in OrGAN. The necessity to "
+"create this library (instead of using, e.g., PyG) is that most existing "
+"neural graph libraries assume there is a strictly defined set of edges "
+"(and the graph is represented using this set). However, it is not the "
+"case in OrGAN, where graph edges are created by the generator, and the "
+"presence of an edge is not strictly binary (it is necessary to allow "
+"gragient flow to the generator)."
+msgstr ""
+
+#: of organ.tingle:14
+msgid ""
+"The TiNGLe uses graph representation most convenient for the generation "
+"process, representing the graph connectivity by an adjacency matrix. "
+"Conceptually, the library follows message passing framework for graph "
+"neural networks and is based on the ideas, described in "
+"https://distill.pub/2021/gnn-intro/. More precidely, a graph is "
+"represented using the following components:"
+msgstr ""
+
+#: of organ.tingle:21
+msgid "global representation (one vector, describing graph as a whole);"
+msgstr ""
+
+#: of organ.tingle:22
+msgid ""
+"nodes representation. In TiNGLe it is assumed, that a node can have a "
+"type, besides, it can also have some set of features, so:"
+msgstr ""
+
+#: of organ.tingle:25
+msgid "node types (batch x nodes x node_types);"
+msgstr ""
+
+#: of organ.tingle:26
+msgid "node features (batch x nodes x N_F);"
+msgstr ""
+
+#: of organ.tingle:28
+msgid ""
+"edges representation. Edges can also be of multiple types, however, "
+"between a pair of nodes it is not possible to have more than one edge:"
+msgstr ""
+
+#: of organ.tingle:32
+msgid ""
+"edge types (batch x edge_types x nodes x nodes ). In this representation,"
+" 0 means that there is no edge of the respective type, and 1 - that there"
+" is. However, other values are also possible - they are interpreted as a "
+"\"power\" of connection and are used during the propagation through (or "
+"from) the respective edge."
+msgstr ""
+
+#: of organ.tingle:38
+msgid ""
+"edge representation (one for all types of edges) (batch x nodes x nodes x"
+" V_F)."
+msgstr ""
+
+#: of organ.tingle:41
+msgid ""
+"The library is based on the message passing framework, specifically, "
+"message massing implemented in TiNGLe consists of the following steps:"
+msgstr ""
+
+#: of organ.tingle:44
+msgid ""
+"collection. At this step, the library identifies relevant components "
+"(depending on the message type). Any usage of the edge data is multiplied"
+" by a \"strength\" of this connection;"
+msgstr ""
+
+#: of organ.tingle:47
+msgid ""
+"aggregation. It is a mechanism to obtain one representation from several "
+"vectors identified during the collection step. Aggragation can be two-"
+"staged: aggregation of components (passed) via one type of edges and "
+"further aggregation across several types of edges. Two-staged aggregation"
+" occurs in V-V message passing. The simplest aggragation type is "
+"summation, some types of message passing, e.g., V-E allow concatenation, "
+"because each edge has exactly two incident nodes;"
+msgstr ""
+
+#: of organ.tingle:54
+msgid ""
+"merge. Merging the aggregated data with the existing component "
+"representation. The simplest kinds are replacement and concatenation. "
+"Some of the merging strategies are possible only for certain messages."
+msgstr ""
+
+#: of organ.tingle:58
+msgid "The library defines two types of tools:"
+msgstr ""
+
+#: of organ.tingle:60
+msgid ""
+"Functions to implement collection and aggragation steps for various kinds"
+" of message passing."
+msgstr ""
+
+#: of organ.tingle:62
+msgid ""
+"Classes and \"orchestration\" tools to compose the architecture of a "
+"complete graph neural network."
+msgstr ""
+
+#: of organ.tingle:65
+msgid "As a result, one can build graph neural networks in the following way:"
+msgstr ""
+
+#: of organ.tingle.EV:1
+msgid "E-V pooling."
+msgstr ""
+
+#: of organ.tingle.EV:3
+msgid ""
+"For each node, collects and aggregates information from the incident "
+"edges, then merges with the existing node representation."
+msgstr ""
+
+#: of organ.tingle.GNNBlock:1
+msgid ""
+"Plain GNN block, performing independent transformations on the selected "
+"graph components."
+msgstr ""
+
+#: of organ.tingle.VE:1
+msgid "V-E pooling."
+msgstr ""
+
+#: of organ.tingle.VE:3
+msgid ""
+"For each edge, collects and aggregates information from the incident "
+"nodes, then merges with the existing edge representation."
+msgstr ""
+
+#: of organ.tingle.VV:1
+msgid "V-V pooling."
+msgstr ""
+
+#: of organ.tingle.VV:3
+msgid ""
+"For each node, collects information from all adjacent nodes (using each "
+"edge type), aggregates and merges to the new node representation."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:1
+msgid "Collection and aggregation for ev-message passing."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:3
+msgid ""
+"Collects all edges incident to a node and aggregates them (adjacency "
+"value determines weight of an edge)."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:6
+msgid "if outbound == True:"
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:12
+msgid "if outbound == False:"
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:18
+msgid "Adjacency matrix."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:20
+msgid "Edge representation."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:22
+msgid ""
+"Node representations aggregation strategy. Can be `'sum'` (summation) or "
+"`'avg'` (the sum is divided by the total weight of the contributing "
+"edges)."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:26
+msgid ""
+"Aggregation should be for outbound edges. ``False`` means that the "
+"aggregation is across the inbound edges of a node."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:29 organ.tingle.vv_collect_aggregate:25
+msgid ""
+"Important for the aggregation strategy `'avg'` to avoid accidental "
+"division by zero."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:32
+msgid "Edge type weights for the \"second stage\" aggregation."
+msgstr ""
+
+#: of organ.tingle.ev_collect_aggregate:35 organ.tingle.ve_collect_aggregate:14
+#: organ.tingle.vv_collect_aggregate:31
+msgid "Nodes representation."
+msgstr ""
+
+#: of organ.tingle.ve_collect_aggregate:1
+msgid "Collection and aggregation for ve-message passing."
+msgstr ""
+
+#: of organ.tingle.ve_collect_aggregate:3
+msgid ""
+"For each edge the function collects the representations of the incident "
+"nodes and aggregates them using the specified strategy. As a result, "
+"there is a new representation for each edge (and each edge type). "
+"According to the general principles of the library, edge weigts are "
+"applied only for \"outbound\" information, so it is not the case here."
+msgstr ""
+
+#: of organ.tingle.ve_collect_aggregate:16
+msgid ""
+"Node representation aggregation strategy. Can be `'sum'` (summation), "
+"`'avg'` (arithmetic average), `'subtract'` (subtraction), or '`cat'` "
+"(concatenation)."
+msgstr ""
+
+#: of organ.tingle.ve_collect_aggregate:21
+msgid ""
+"Edge representation. This tensor describes a full graph (there is a "
+"representation for each pair of nodes)."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:1
+msgid "Collection and aggregation for vv-message passing."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:3
+msgid ""
+"For each node and each edge type the function collects adjacent node "
+"representations (respecting the edge weight) and aggregates them "
+"according to `agg` strategy. Then, it also aggregates the resulting "
+"vectors along edge types (summing with optional weights)."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:14
+msgid "Nodes representations."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:16
+msgid "Adjacency matrices."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:18
+msgid ""
+"The strategy to aggragate nodes representations, obtained via one edge "
+"type. Can be either `'sum'` (summation) or `'avg'` (then the sum is "
+"divided by the sum of edge weights)."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:23
+msgid "If loops should be added to each of the edge types."
+msgstr ""
+
+#: of organ.tingle.vv_collect_aggregate:28
+msgid "Optional edge type weights."
+msgstr ""
+
+#: ../../modules.rst:41
+msgid "demo"
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel:1
+msgid ""
+"An adapter, defining methods to use organization structure model for "
+"logistics scenario during OrGAN training."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.metrics:1
+#: organ.demo.ManagementModel.metrics:1
+msgid "Returns a dict with relevant metric values."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.metrics:3
+#: organ.demo.LogisticsDepartmentModel.validness:3
+#: organ.demo.ManagementModel.metrics:3 organ.demo.ManagementModel.validness:3
+msgid "Organization structure configuration."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.metrics:6
+#: organ.demo.ManagementModel.metrics:6
+msgid "metrics and functions for their evaluation."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.validness:1
+#: organ.demo.ManagementModel.validness:1
+msgid "Checks structure validness."
+msgstr ""
+
+#: ../../docstring of organ.demo.LogisticsDepartmentModel.validness:6
+#: organ.demo.ManagementModel.validness:6
+msgid "True if the configuration is valid, False otherwise."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel:1
+msgid "SCSP demo model class for the logistics department scenario."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children:1
+#: organ.demo.ManagementStructureModel.check_children:1
+msgid "Recursive function for checking correctness of model's node structure."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children:3
+#: organ.demo.ManagementStructureModel.check_children:3
+msgid "List of top level nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children:5
+#: organ.demo.ManagementStructureModel.check_children:5
+msgid "List of child nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children:7
+#: organ.demo.ManagementStructureModel.check_children:7
+msgid "Flag indicating that child models are mandatory."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_children:10
+#: organ.demo.ManagementStructureModel.check_children:10
+msgid ""
+"Boolean flag of the model structure correctness, txtual description of "
+"the problem (empty the model structure is valid)."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_nodes:1
+#: organ.demo.ManagementStructureModel.check_nodes:1
+msgid "Checks node types validity."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_nodes:3
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations:3
+#: organ.demo.ManagementStructureModel.check_nodes:3
+#: organ.demo.ManagementStructureModel.check_relations:3
+msgid ""
+"The list of node types for each vertex (length must be "
+"==`self.MAX_NODES_PER_GRAPH`)."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_nodes:7
+#: organ.demo.ManagementStructureModel.check_nodes:7
+msgid "Returns `True` if the structure contains valid set of nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:1
+msgid "Checking the feasibility of the staff quantity of an organisational unit."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:3
+msgid "Model's nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:5
+msgid "Expected load of the node to be checked."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:7
+msgid "The node to be checked."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:9
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons:7
+msgid "Allowed minimum load for a person."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:11
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons:9
+msgid "Allowed maximum load for a person."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:13
+msgid "Allowed minimum load for a dedicated organisational unit."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:15
+msgid "Minimum load for that requaires a dedicated organisational unit."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:17
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility:7
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:9
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values:7
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility:7
+#: organ.demo.ManagementStructureModel.generate_augmentation:9
+#: organ.demo.ManagementStructureModel.generate_values:7
+msgid "Enable/disable logging."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_org_unit_feasibility:20
+msgid "True if the validations successful, False otherwise."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility:1
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility:1
+msgid "Checks parameter validity."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility:3
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility:3
+msgid "The list of node."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility:5
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility:5
+msgid "The list of parameters."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility:9
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.unpack_ctx:3
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility:9
+msgid "context."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_paramater_feasibility:12
+#: organ.demo.ManagementStructureModel.check_paramater_feasibility:12
+msgid "Returns `True` if the parameters are valid."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations:1
+#: organ.demo.ManagementStructureModel.check_relations:1
+msgid "Checks relations validity."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations:6
+#: organ.demo.ManagementStructureModel.check_relations:6
+msgid "Relation type matrix."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations:9
+#: organ.demo.ManagementStructureModel.check_relations:9
+msgid ""
+"* *bool* -- Returns `True` if all the set of edges is valid and "
+"consistent   with the nodes. * *diff* -- Boolean matrix of edge validness"
+" (`True` for valid edges)."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations:9
+#: organ.demo.ManagementStructureModel.check_relations:9
+msgid ""
+"*bool* -- Returns `True` if all the set of edges is valid and consistent "
+"with the nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_relations:11
+#: organ.demo.ManagementStructureModel.check_relations:11
+msgid "*diff* -- Boolean matrix of edge validness (`True` for valid edges)."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:1
+#: organ.demo.ManagementStructureModel.check_uniqueness:1
+msgid "Checks structure uniqueness compared to the training set."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:3
+#: organ.demo.ManagementStructureModel.check_uniqueness:3
+msgid "Nodes of the training set configurations."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:5
+#: organ.demo.ManagementStructureModel.check_uniqueness:5
+msgid "Edges of the training set configurations."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:7
+#: organ.demo.ManagementStructureModel.check_uniqueness:7
+msgid "Staff quantities of the training set configurations."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:9
+#: organ.demo.ManagementStructureModel.check_uniqueness:9
+msgid "Contexts of the training set configurations."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:11
+#: organ.demo.ManagementStructureModel.check_uniqueness:11
+msgid "Nodes of the checked configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:13
+#: organ.demo.ManagementStructureModel.check_uniqueness:13
+msgid "Edges of the checked configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:15
+#: organ.demo.ManagementStructureModel.check_uniqueness:15
+msgid "Staff quantiities of the checked configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:17
+#: organ.demo.ManagementStructureModel.check_uniqueness:17
+msgid "Context of the checked configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.check_uniqueness:20
+#: organ.demo.ManagementStructureModel.check_uniqueness:20
+msgid "True if the configuration is unique, False otherwise."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons:1
+msgid "Convert load values to staff quantity."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons:3
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values:3
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values:3
+#: organ.demo.ManagementStructureModel.generate_key_values:3
+#: organ.demo.ManagementStructureModel.generate_values:3
+msgid "List of model nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons:5
+msgid "Load per unit."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.convert_values2persons:12
+msgid "list of staff quantities."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:1
+#: organ.demo.ManagementStructureModel.generate_augmentation:1
+msgid "Generate augmentation."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:3
+#: organ.demo.ManagementStructureModel.generate_augmentation:3
+msgid "Nodes of the source configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:5
+#: organ.demo.ManagementStructureModel.generate_augmentation:5
+msgid "Edges of the source configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:7
+#: organ.demo.ManagementStructureModel.generate_augmentation:7
+msgid "The staff quantiities of the source configuration."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:11
+#: organ.demo.ManagementStructureModel.generate_augmentation:11
+msgid ""
+"maximum number of iterations until a valid augmented configuration is "
+"generated."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_augmentation:15
+msgid ""
+"aug_nodes - augmented nodes, aug_edges - augmented edges, aug_staff - "
+"augmented staff, self.pack_to_ctx(v) - augmented context."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values:1
+#: organ.demo.ManagementStructureModel.generate_key_values:1
+msgid "Generation of random key values for model parameters."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values:5
+#: organ.demo.ManagementStructureModel.generate_key_values:5
+msgid "Enable/disable logging.."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_key_values:8
+#: organ.demo.ManagementStructureModel.generate_key_values:8
+msgid "list of generated key values."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values:1
+#: organ.demo.ManagementStructureModel.generate_values:1
+msgid "Generation of augmented model parameters."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values:5
+#: organ.demo.ManagementStructureModel.generate_values:5
+msgid "Key values for parameter generation."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.generate_values:10
+#: organ.demo.ManagementStructureModel.generate_values:10
+msgid "list of generated model parameter values."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap:1
+msgid "Checks if two intervals intersect."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap:3
+msgid "Lower bound of the first interval"
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap:5
+msgid "Upper bound of the first interval"
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap:7
+msgid "Lower bound of the second interval"
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap:9
+msgid "Upper bound of the second interval"
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.overlap:12
+msgid "Returns `True` if the intervals intersect."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.pack_to_ctx:1
+msgid "Pack list of load values for all nodes to context."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.pack_to_ctx:3
+msgid "List of load values for all nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.pack_to_ctx:6
+msgid "context (key parameters)."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.unpack_ctx:1
+msgid "Unpack context to list of load values for all nodes."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.LogisticsDepartmentOrganizationStructureModel.unpack_ctx:6
+msgid "list of load values for all nodes."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel:1
+msgid ""
+"An adapter, defining methods to use organization structure model for the "
+"administration and sales scenario during OrGAN training."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:1
+msgid "Soft constraints for this scenario."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:3
+msgid ""
+"The function describes some relationships between node parameters, "
+"context, and organization structure to simplify the training of a "
+"generator."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:7
+msgid ""
+"Nodes description in an 'internal' format: (batch, nodes, node_types). "
+"Value is the probability that a node of the specific type is located in a"
+" certain position. Zero-type corresponds to the absense of a node. Non-"
+"zero values can be only on the matrix diagonal or zeroth column."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:13
+msgid ""
+"Edges representation in an 'internal' format: (batch, nodes, nodes, "
+"edge_types)."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:16
+msgid "Node features: (batch, nodes, features_per_node)."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:18
+msgid "Generation context: (batch, context_features)."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementModel.soft_constraints:21
+msgid ""
+"Value tensor (0-dimensional). Non-negative loss for violation of the "
+"constraints."
+msgstr ""
+
+#: ../../docstring of organ.demo.ManagementStructureModel:1
+msgid "SCSP demo model class, describing administration and sales scenario."
+msgstr ""
+
+#: ../../docstring of
+#: organ.demo.ManagementStructureModel.generate_augmentation:15
+msgid ""
+"aug_nodes - augmented nodes, aug_edges - augmented edges, aug_staff - "
+"augmented staff, ctx - augmented context."
+msgstr ""
+

@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2022, OrGAN authors
+# This file is distributed under the same license as the OrGAN package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2023.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: OrGAN 0.5\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-01-25 11:27+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../index.rst:7
+msgid "Welcome to OrGAN's documentation!"
+msgstr "Документация компонента OrGAN"
+
+#: ../../index.rst:9
+msgid ""
+"OrGAN is a library to leverage the power of generative adversarial "
+"networks (or, GANs) for generating organization structures respecting "
+"both formal constraints (expressed by functions and predicates - "
+"differentiable or not) and expert knowledge (expressed in implicit form "
+"via the set of training examples)."
+msgstr ""
+"OrGAN - компонент библиотеки сильного ИИ, использующий возможности генеративных "
+"нейросетевых моделей (GAN) для формирования организационных структур с учетом "
+"формальных ограничений (выраженных функциями и предикатами - "
+"как дифференцируемыми, так и недифференцируемыми) и экспертных знаний (представленных неявно "
+"через обучающий набор)."
+
+#: ../../index.rst:23
+msgid "Indices and tables"
+msgstr "Указатели и поиск"
+
+#: ../../index.rst:25
+msgid ":ref:`genindex`"
+msgstr ""
+
+#: ../../index.rst:26
+msgid ":ref:`modindex`"
+msgstr ""
+
+#: ../../index.rst:27
+msgid ":ref:`search`"
+msgstr ""
+
