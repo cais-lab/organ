@@ -1104,6 +1104,290 @@ class ManagementStructureModel:
         return True
 
 
+class SapSamEMStructureModel:
+    """Enterprise model from SAP-SAM dataset.
+
+    Built from Organigrams of the SAP Signavio Academic 
+    Models (SAP-SAM) dataset (https://github.com/signavio/sap-sam).
+    """
+
+    # status: 0 - optional, 1 - mandatory
+    node_type_dict = {
+        0:  {'title': 'none',        'status': 0, 'weight': 0},
+        1:  {'title': 'Managment',   'status': 1},
+        2:  {'title': 'Sales',       'status': 0},
+        3:  {'title': 'Production',  'status': 0},
+        4:  {'title': 'Finance',     'status': 0},
+        5:  {'title': 'Logistics',   'status': 0},
+        6:  {'title': 'Procurement', 'status': 0},
+        7:  {'title': 'Purchase',    'status': 0},
+        8:  {'title': 'Research & Development',
+             'status': 0},
+        9:  {'title': 'Human Resources',
+             'status': 0},
+        10: {'title': 'Legal', 'status': 0},
+        11: {'title': 'Finance & Legal',
+             'status': 0},
+        12: {'title': 'IT',          'status': 0},
+        13: {'title': 'Analytics',   'status': 0},
+        14: {'title': 'Quality Management',
+             'status': 0},
+        15: {'title': 'Operations',  'status': 0},
+        16: {'title': 'Supply Chain',
+             'status': 0},
+        17: {'title': 'Supply Chain & Logistics',
+             'status': 0},
+        18: {'title': 'Sales & Customer Care',
+             'status': 0},
+        19: {'title': 'Customer Care',
+             'status': 0},
+        20: {'title': 'Services',    'status': 0},
+        21: {'title': 'Warehousing', 'status': 0},
+    }
+
+    # Number of node types
+    NODE_N_TYPES = len(node_type_dict)
+    # Number of edge types (including NO EDGE)
+    EDGE_N_TYPES = 2
+    # Max number of vertices per graph
+    MAX_NODES_PER_GRAPH = NODE_N_TYPES # len(node_type_dict) - 1
+
+    nodes_base = [
+            [1, 2, 3, 4, 5],
+            [1, 2, 3, 4, 5, 6],
+            [1, 2, 3, 7, 5, 4],
+            [1, 8, 13, 12, 5, 3, 14],
+            [1, 4, 7, 5],
+            [1, 9, 5, 4, 10, 8, 13, 2],
+            [1, 5, 11],
+            [1, 2, 4, 3, 17, 13, 12, 9],
+            [1, 12, 4, 7, 9, 2, 5],
+            [1, 14, 19, 2, 8, 17, 4, 9, 12],
+            [1, 12, 14, 8, 3, 5],
+            [1, 2, 6, 16, 5],
+            [1, 4, 15, 5, 16, 12, 2],
+            [1, 12, 8, 3, 5, 14],
+            [1, 2, 20, 4, 16, 15, 5, 6],
+            [1, 2, 21, 6],
+            [1, 2, 7, 4, 3, 6, 5]
+        ]
+
+    relations_base = [
+            [[1,2], [1,3], [1,4], [1,5]],
+            [[1,2], [1,3], [1,4], [1,5], [3,6]],
+            [[1,2], [1,3], [1,7], [1,5], [1,4]],
+            [[1,8], [8,13], [8,12], [8,5], [8,3], [8,14]],
+            [[1,4], [1,7], [7,5]],
+            [[1,9], [1,5], [1,4], [1,10], [1,8], [1,13], [1,2]],
+            [[1,5], [1,11]],
+            [[1,2], [1,4], [1,3], [1,17], [1,13], [1,12], [1,9]],
+            [[1,12], [1,4], [1,7], [1,9], [1,2], [1,5]],
+            [[1,14], [1,19], [1,2], [1,8], [1,17], [1,4], [1,9], [1,12]],
+            [[1,12], [1,14], [1,8], [1,3], [1,5]],
+            [[1,2], [1,6], [1,16], [1,5]],
+            [[1,4], [1,15], [1,12], [1,2], [15,5], [15,16]],
+            [[1,12], [1,8], [1,3], [1,5], [1,14]],
+            [[1,2], [2,20], [1,4], [1,16], [16,15], [15,5], [5,6]],
+            [[1,2], [1,21], [1,6]],
+            [[1,2], [2,7], [1,4], [1,3], [3,6], [1,5]]
+        ]
+    
+    relations_dict = np.zeros((NODE_N_TYPES, NODE_N_TYPES), dtype=int)
+    relations_dict[1] = np.array([0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1])
+    relations_dict[2][7] = 1
+    relations_dict[2][20] = 1
+    relations_dict[3][6] = 1
+    relations_dict[7][5] = 1
+    relations_dict[16][15] = 1
+    relations_dict[15][16] = 1
+    relations_dict[15][5] = 1
+    relations_dict[15][8] = 1
+    relations_dict[5][6] = 1
+    relations_dict[5][6] = 1
+    relations_dict[8][13] = 1
+    relations_dict[8][12] = 1
+    relations_dict[8][5] = 1
+    relations_dict[8][3] = 1
+    relations_dict[8][14] = 1
+        
+    def __init__(self):
+        pass
+
+    def generate_parametrized_model(self, logging=False):
+        """Return pre-defined models.
+
+        Parameters
+        ----------
+        logging : bool
+            Enable/disable logging..
+
+        Returns
+        -------
+        tuple
+            generated nodes, relations.
+        """
+        
+        dataset_size = len(self.nodes_base)
+        nodes = np.zeros((dataset_size, self.NODE_N_TYPES), dtype=float)
+        relations = np.zeros((dataset_size, self.NODE_N_TYPES, self.NODE_N_TYPES), dtype=float)
+        
+        for i in range(0, dataset_size):
+            for node in self.nodes_base[i]:
+                nodes[i, node] = node
+            for relation in self.relations_base[i]:
+                relations[i, relation[0], relation[1]] = 1
+        
+        return nodes, relations
+
+    def check_relations(self, nodes, relations):
+        """Checks relations validity.
+
+        Parameters
+        ----------
+        nodes : List, numpy.array
+            The list of node types for each vertex (length must be
+            ==`self.MAX_NODES_PER_GRAPH`).
+        relations : numpy.ndarray (n, n)
+            Relation type matrix.
+
+        Returns
+        -------
+        bool
+            Returns `True` if all the set of edges is valid and consistent
+            with the nodes.
+        diff
+            Boolean matrix of edge validness (`True` for valid edges).
+        """
+        #non-existing nodes have no inputs or outputs
+        #node 1 has no input
+        #existing nodes have only 1 input
+        relations_dict_tmp = self.relations_dict.copy()
+        for i in range(0, self.NODE_N_TYPES):
+            if nodes[i] < 0.1:
+                relations_dict_tmp[i, :] = 0
+                relations_dict_tmp[:, i] = 0
+                if np.sum(relations[i, :]) > 0.1 or np.sum(relations[:, i]) > 0.1:
+                    #print("A")
+                    return False, []
+            if nodes[i] > 0.9:
+                if i == 1:
+                    if np.sum(relations[i, :]) < 0.1 or np.sum(relations[:, i]) > 0.1:
+                        #print("B")
+                        return False, []
+                else:
+                    if np.sum(relations[:, i]) < 0.1 or np.sum(relations[:, i]) > 1.1:
+                        #print("C")
+                        return False, []
+
+        relations_diff = np.array([relations <= relations_dict_tmp])
+        result = relations_diff.all()
+        
+        return result, relations_diff
+
+    def check_nodes(self, nodes) -> bool:
+        """Checks node types validity.
+
+        Parameters
+        ----------
+        nodes : List, numpy.array
+            The list of node types for each vertex (length must be
+            ==`self.MAX_NODES_PER_GRAPH`).
+
+        Returns
+        -------
+        bool
+            Returns `True` if the structure contains valid set of nodes.
+        """
+        
+        if (nodes[0]>0 or nodes[1]<0.9 or np.sum(nodes)<2.7):
+            return False
+        if (nodes[11]>0.5 and (nodes[4]>0.5 or nodes[10]>0.5)):
+            return False
+        if (nodes[17]>0.5 and (nodes[5]>0.5 or nodes[16]>0.5)):
+            return False
+        if (nodes[18]>0.5 and (nodes[2]>0.5 or nodes[19]>0.5)):
+            return False
+        
+        return True
+
+    def generate_augmentation(self,
+                              ground_truth_nodes,
+                              ground_truth_edges,
+                              ground_truth_staff,
+                              logging=False,
+                              max_iterations=100):
+        #
+        #   Select random base model
+        #
+        dataset_size = ground_truth_nodes.shape[0]
+        src_sample_id = np.random.randint(0, dataset_size)
+        base_nodes = ground_truth_nodes[src_sample_id]
+        base_edges = ground_truth_edges[src_sample_id]
+        #
+        #   Augment structure
+        #
+        iterations = 0
+        valid_structure = False
+        while iterations < max_iterations:
+            iterations += 1
+            aug_nodes = base_nodes.copy()
+            aug_edges = base_edges.copy()
+            for i in range(1, self.NODE_N_TYPES):
+                if random.choices([True, False], k=1, weights=[1, 8])[0]:
+                    if aug_nodes[i] == 0:
+                        aug_nodes[i] = i
+                    else:
+                        aug_nodes[i] = 0
+                        aug_edges[i,:] = np.zeros((self.NODE_N_TYPES), dtype=int)
+                        aug_edges[:,i] = np.zeros((self.NODE_N_TYPES), dtype=int)
+            if not self.check_nodes(aug_nodes):
+                continue
+            for i in range(2, self.NODE_N_TYPES):
+                if aug_nodes[i] > 0.5:
+                    if (np.sum(aug_edges[:, i])) < 0.5:
+                        node_list = []
+                        for j in range(1, self.NODE_N_TYPES):
+                            if aug_nodes[j] > 0.5 and self.relations_dict[j][i]==1: 
+                                node_list.append(j)
+                        if len(node_list) > 0:
+                            input_node_index = random.choice(node_list)
+                            aug_edges[input_node_index,i] = 1
+
+            res, _ = self.check_relations(aug_nodes, aug_edges)
+            if not res:
+                continue
+            #
+            #   Check uniqueness
+            #
+            unique_flag = True
+            for i in range(dataset_size):
+                if (ground_truth_nodes[i]==aug_nodes).all() and \
+                    (ground_truth_edges[i]==aug_edges).all():
+
+                    #not unique!
+                    if logging:
+                        print("Not a unique augmentation!", i)
+                    unique_flag = False
+                    break
+
+            if unique_flag:
+                return aug_nodes, aug_edges, [], []
+
+        return [], [], [], []
+
+    def validness(self, org) -> bool:
+        """Checks structure validness."""
+        return self.check_nodes(org.nodes) and \
+               self.check_relations(org.nodes, org.edges)[0]
+
+    def metrics(self, org) -> dict:
+        """Returns a dict with relevant metric values."""
+        return {
+            'node score': self.check_nodes(org.nodes),
+            'edge score': self.check_relations(org.nodes, org.edges)[0]
+        }
+
+
 class LogisticsDepartmentModel(
     LogisticsDepartmentOrganizationStructureModel):
     """An adapter, defining methods to use organization structure

@@ -35,6 +35,8 @@ def _structure_rules(val: str):
         return organ.demo.LogisticsDepartmentModel()
     elif val == 'demo_management':
         return organ.demo.ManagementModel()
+    elif val == 'sapsam':
+        return organ.demo.SapSamEMStructureModel()
     elif val == 'generic':
         return organ.structure.models.Generic()
     else:
@@ -154,6 +156,9 @@ class _Configurator:
         parser.add_argument('--non_parametric', action='store_false',
                             default=True, dest='parametric',
                             help='disable parametric generation')
+        parser.add_argument('--train_completion', action='store_true',
+                            default=False, dest='completion',
+                            help='train for structure completion')
 
         # Directories.
         # Директория с данными

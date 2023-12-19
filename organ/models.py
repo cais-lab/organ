@@ -803,3 +803,152 @@ class __Deprecated(nn.Module):
         output = activation(gl) if activation is not None else gl
 
         return output
+
+class CompletionGenerator(nn.Module):
+    """Structure completion generator."""
+
+    def __init__(self, conv_dims, edge_conv_dims,
+                 z_dim, node_types, edge_types,
+                 dropout):
+        """Constructor.
+
+        Parameters
+        ----------
+        conv_dims : list
+            List, describing the FC layers in the beginning of the
+            generator.
+        edge_conv_dims : list
+            List, describing the FC layers for edge generation.
+        z_dim : int
+            Input dimensions.
+        node_types : int
+            Number of types of nodes.
+        edge_types : int
+            Number of connections (edges).
+        dropout : float
+            Droupout [0; 1] (applied to each layer, including output).
+        """
+        super().__init__()
+
+        self.node_types = node_types
+        self.edge_types = edge_types
+
+        self.node_repr_size = 3
+        self.node_hidden_size = 10
+        
+        # Encode the input noise
+        self.noise_encoder = FCBlock(z_dim,
+                                     conv_dims[:-1],
+                                     conv_dims[-1],
+                                     nn.Tanh,
+                                     dropout)
+
+        # Initial data for each node
+        self.global_to_nodes = nn.Linear(conv_dims[-1],
+                                         self.node_types * self.node_repr_size)
+        # Hidden representation of the initial nodes
+        # data and the specification
+        self.nodes_to_hidden = nn.Sequential(
+            nn.Linear(self.node_repr_size + 2,
+                      self.node_hidden_size),
+            nn.ReLU()
+        )
+        # Weights
+        self.context = nn.Parameter(torch.rand(node_types,
+                                               node_types,
+                                               dtype=torch.float32))
+        # Nodes encoder
+        self.nodes_encoder = nn.Sequential(
+            nn.Linear(2 * self.node_hidden_size, 10),
+            nn.ReLU(),
+            nn.Linear(10, 1)
+        )
+        
+        # General edge specification
+        self.edges_spec_layer = nn.Linear(conv_dims[-1], 32)
+        self.edge_layers = FCBlock(self.node_types + 32,
+                                   edge_conv_dims[:-1],
+                                   edge_conv_dims[-1],
+                                   nn.Tanh, dropout)
+
+        # Edge output layer
+        self.edges_layer = nn.Linear(edge_conv_dims[-1],
+                                     edge_types)
+
+
+    def forward(self, nodes, edges, nodes_mask, edges_mask, ignored, z):
+        """Forward pass.
+        
+        Parameters
+        ----------
+        nodes : torch.tensor
+            The specification of existing nodes,
+            (batch, node_types, node_types)
+        edges : torch.tensor
+            The specification of existing edges,
+            (batch, node_types, node_types, edge_types)
+        nodes_mask : torch.tensor
+            The mask defining the presence of which nodes
+            should be conserved in the output,
+            (batch, node_types)
+        edges_mask : torch.tensor
+            The mask defining the presence of which nodes
+            should be conserved in the output,
+            (batch, node_types, node_types)
+        z : torch.tensor
+            Noise vector.
+        """
+
+        batch_size = z.shape[0]
+        
+        # Apply the fully connected layers to obtain
+        # global graph representation
+        z = self.noise_encoder(z)
+
+        # Nodes cue from the global graph
+        # representation
+        x = self.global_to_nodes(z).view(-1,
+                                         self.node_types,
+                                         self.node_repr_size)
+
+        # Join nodes cue from the global representation with the 
+        # external specification (required nodes)
+        x = torch.cat([x, 
+                       (1. - nodes[:, :, 0]).unsqueeze(-1),
+                       nodes_mask.unsqueeze(-1)], dim=2)
+        # To a hidden representation of nodes
+        x = self.nodes_to_hidden(x)
+        # Account for other nodes
+        x_ = organ.tingle.vv_collect_aggregate(x,
+                                         self.context.expand(batch_size,
+                                                             1,
+                                                             -1,
+                                                             -1))
+        x = torch.cat([x, x_], dim=2)
+        
+        # Final nodes encoding
+        nodes_logits = self.nodes_encoder(x).squeeze(-1)
+        nodes_sigm = torch.sigmoid(nodes_logits)
+       
+        # Nodes to extended form
+        nodes_hat = torch.diag_embed(nodes_sigm)
+        nodes_hat[:, :, 0] += (1 - nodes_sigm)
+
+        # Edges specification
+        # Account for the global graph representation
+        ctx = self.edges_spec_layer(z)
+        # Collect node types incident to each edge
+        cc = organ.tingle._cartesian(nodes_hat)
+
+        # Global + incident nodes
+        edges_data = torch.cat([cc[0] - cc[1],
+                                ctx.view(-1, 1, 1, 32).
+                                    expand(-1,
+                                           self.node_types, 
+                                           self.node_types,
+                                           -1)],
+                               axis=-1)
+        edges = self.edge_layers(edges_data)
+        edges_logits = self.edges_layer(edges)
+
+        return edges_logits, nodes_logits, None

@@ -294,3 +294,32 @@ def test_demo_management_generate_augmentation():
                            node_features=aug_configuration[2],
                            condition=aug_configuration[3])
     assert org_model.validness(aug_org)
+
+
+def test_sapsam_dataset():
+    org_model = organ.demo.SapSamEMStructureModel()
+    nodes, relations = org_model.generate_parametrized_model()
+    assert nodes.shape == (17, 22)
+    assert relations.shape == (17, 22, 22)
+    
+    for i in range(17):
+        assert org_model.check_nodes(nodes[i])
+        assert org_model.check_relations(nodes[i], relations[i])[0]
+    
+    assert not org_model.check_nodes(np.ones((22, )))
+    assert not org_model.check_nodes(np.zeros((22, )))
+    assert not org_model.check_relations(np.ones((22, )), np.ones((22, 22)))[0]
+    
+    aug_nodes, aug_edges, _, _ = org_model.generate_augmentation(nodes, relations, [], False, 100) 
+    assert org_model.check_nodes(aug_nodes)
+    assert org_model.check_relations(aug_nodes, aug_edges)[0]      
+
+    org = organ.structure.models.Organization(
+        nodes=aug_nodes,
+        edges=aug_edges
+    )
+    assert org_model.validness(org)
+
+    assert len(org_model.metrics(org)) == 2
+    assert 'node score' in org_model.metrics(org)
+    assert 'edge score' in org_model.metrics(org)

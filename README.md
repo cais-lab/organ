@@ -112,9 +112,28 @@ solver = organ.solver.Solver(config)
 solver.train()
 ```
 
-## Usage Example
+## Usage Examples
+There are 3 practical examples in the repository,
+which can be used to illustrate the work of the library.
+The datasets for the examples are located in the subdirectories of the catalog
+`demo_data`, namely:
+* `logistics` - dataset for generating the logistics department
+of a company (the rules are described by the class
+ `organ.demo.LogisticsDepartmentModel`)
+* `management` - dataset for generating the sales and 
+administration & management departments
+ (the rules are described by the class 
+`organ.demo.ManagementModel`)
+* `sapsam` and `sapsam_aug` - datasets (original and augmented, respectively) 
+based on the fragment of the SAP-SAM (https://github.com/signavio/sap-sam) 
+to generate organizational diagrams of a company (the rules are described by 
+the class `organ.demo.SapSamEMStructureModel`)
 
-A logistics department can be considered as an example of socio-cyber-physical system.
+### Generative design of configurations of a company's logistics department
+In this example the logistics department of a company is considered as an
+exampleSCFS. The configurationin this example is considered as a set of components
+(sub-departments), links between them and values of numerical parameters for 
+each component (personnel quantity).
 
 <img src="docs/demo_1_0.png" alt="Logistics department example" width="10800px"/>
 
@@ -151,7 +170,20 @@ to use augmentations. To do this, it is needed need to create an augmented datas
 the training set augmentation algorithm: 
 
 ```
-python augment_dataset.py demo_logistics 1000 demo_data/logistics data 
+python augment_dataset.py demo_logistics 10000 demo_data/logistics data_augmented
+```
+As a result of the script operation, the set of models, extended by using the proposed 
+augmentation algorithm up to 10000 samples, will be placed in the `data_augmented` 
+directory.
+
+Next, it is necessary to train a generative neural network model for the specified
+class. To do this, one can use either script main.py, passing it the appropriate 
+parameters, or directly through the program interface of the organ.solver.Solver class. 
+Let's consider the first method. To train the model using the script, one 
+should execute the following command:
+
+```
+python main.py --rules demo_logistics --data_dir data_augmented
 ```
 
 This will use the training set from the data directory and the validation rules 

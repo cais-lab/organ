@@ -11,7 +11,7 @@ import torch
 import torch.nn.functional as F
 
 from organ.models import CPGenerator, CPDiscriminator, \
-    EdgeAwareGenerator, Discriminator
+    EdgeAwareGenerator, Discriminator, CompletionGenerator
 from organ.structure.models import Organization
 from organ.data.organization_structure_dataset \
     import OrganizationStructureDataset
@@ -42,6 +42,62 @@ class Normalizer:
         return x * self.mt
 
 
+def compliance_loss(expected_nodes, generated_nodes):
+    """Compliance loss.
+    
+    Checks if generated nodes match the expected ones.
+    
+    Parameters
+    ----------
+    expected_nodes : tuple
+        A pair of node specification and the mask.
+    generated_nodes : torch.tensor
+        Generated nodes specification.
+    Returns
+    -------
+        Loss value.
+    """
+    nodes_spec, nodes_mask = expected_nodes
+    x = generated_nodes.squeeze(-1) * nodes_mask
+    gt_x = (nodes_spec >= 0.5).float() * nodes_mask
+    return F.binary_cross_entropy(x, gt_x)
+
+
+def make_random_completion_mask(nodes, edges, node_params, _, *,
+                                node_p=0.4,
+                                edge_p=0.4):
+    """Generates a random mask to use in structure completion training.
+
+    Selects some subset of nodes and edges as 'fixed' - these nodes
+    and edges should be close (or have to be the same) as in the 
+    original structure.
+
+    For example. Let the original node description be [0, 1, 0, 3],
+    with the mask [False, True, True, False] the output should
+    also contain node 1, and should NOT contain node 2, the presence
+    of node 3 is not restricted."""
+    if len(nodes.shape) == 1:
+        is_batch = False
+    elif len(nodes.shape) == 2:
+        is_batch = True
+    else:
+        raise ValueError('"nodes" must have either 1 (non-batched) or 2 (batched) dims')
+
+    nodes_mask = torch.rand(nodes.shape) < node_p
+    if is_batch:
+        nodes_mask[:, 0] = 0
+    else:
+        nodes_mask[0] = 0
+    edges_mask = torch.rand(edges.shape) < edge_p
+    if is_batch:
+        edges_mask[:, :, 0] = 0
+        edges_mask[:, 0, :] = 0
+    else:
+        edges_mask[:, 0] = 0
+        edges_mask[0, :] = 0
+    return nodes_mask, edges_mask
+
+
 class Solver(object):
     """Class for training and testing the OrGAN model."""
 
@@ -60,6 +116,8 @@ class Solver(object):
         self.conditional = config.conditional
         # Parametric generation
         self.parametric = config.parametric
+        # Train completion
+        self.completion = config.completion
 
         # Organization structure model (describing how
         # the organization should be evaluated)
@@ -202,7 +260,14 @@ class Solver(object):
         print('Node types:', self.data.node_num_types, self.m_dim)
         print('Edge types:', self.data.edge_num_types, self.b_dim)
 
-        if not self.parametric and not self.conditional:
+        if self.completion:
+            self.G = CompletionGenerator(self.g_conv_dim,
+                                         self.g_edge_conv_dim,
+                                         self.z_dim,
+                                         self.data.vertexes,
+                                         self.data.edge_num_types,
+                                         self.dropout)
+        elif not self.parametric and not self.conditional:
             self.G = EdgeAwareGenerator(self.g_conv_dim,
                                         self.g_edge_conv_dim,
                                         self.z_dim,
@@ -508,7 +573,7 @@ class Solver(object):
             return d_loss_gp
 
         def process_batch(a_tensor, x_tensor, params, cond,
-                          orgs, z,
+                          orgs, z, masks,
                           critic=True, is_training=True):
             """Обработка батча."""
 
@@ -531,7 +596,9 @@ class Solver(object):
             d_loss_real = -torch.mean(torch.log(torch.sigmoid(logits_real)))
 
             # Compute loss with fake structures.
-            edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond)
+            edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond,
+                                                              partial=(x_tensor, a_tensor),
+                                                              partial_masks=masks)
             logits_fake = self.D(edges_hat,
                                  nodes_hat,
                                  params_hat,  # node features
@@ -570,7 +637,9 @@ class Solver(object):
                 # =========================================================== #
 
                 # Получить батч из генератора
-                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond)
+                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond,
+                                                                  partial=(x_tensor, a_tensor),
+                                                                  partial_masks=masks)
                 # Получить оценку настоящих образцов с помощью "черного ящика"
                 # Real Reward
                 rewardR = torch.from_numpy(self.reward(orgs)).to(self.device)
@@ -606,7 +675,9 @@ class Solver(object):
                 # =========================================================== #
 
                 # Получить батч из генератора
-                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond)
+                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond,
+                                                                  partial=(x_tensor, a_tensor),
+                                                                  partial_masks=masks)
 
                 # Оценить правдоподобие с точки зрения дискриминатора
                 logits_fake = self.D(edges_hat,
@@ -627,6 +698,12 @@ class Solver(object):
                 # критериям, аппроксимируемым V, то есть V выдавал
                 # для них 1.0
                 g_loss_value = -torch.mean(torch.log(value_proba_fake))
+                
+                if self.completion:
+                    g_loss_comp = compliance_loss((1 - x_tensor[:, :, 0], masks[0]),
+                                                  1 - nodes_hat[:, :, 0])
+                else:
+                    g_loss_comp = torch.tensor(0.0, device=self.device)
 
                 # Тут также может быть расчет других, дифференцируемых,
                 # характеристик сгенерированной структуры
@@ -648,7 +725,11 @@ class Solver(object):
                 # потерь неправдоподобности (g_loss_fake) потерь, связанных с
                 # нарушением ограничений V (g_loss_value) и прочих потерь
                 # Backward and optimize.
-                g_loss = g_loss_fake + g_loss_value + g_loss_soft_constraints
+                g_loss = g_loss_fake + \
+                         g_loss_value + \
+                         g_loss_soft_constraints + \
+                         g_loss_comp
+                         
                 if is_training:
                     self.reset_grad()
                     g_loss.backward()
@@ -658,6 +739,8 @@ class Solver(object):
                 loss['G/loss_fake'] = g_loss_fake.item()
                 loss['G/loss_value'] = g_loss_value.item()
                 loss['G/loss_soft'] = g_loss_soft_constraints.item()
+                if self.completion:
+                    loss['G/loss_compliance'] = g_loss_comp.item()
 
             return orgs, loss
 
@@ -682,11 +765,11 @@ class Solver(object):
 
             # Получение очередного батча, его подготовка и загрузка на
             # устройство
-            x_tensor, a_tensor, params, cond, orgs, z = self._next_batch('train')    # noqa: E501
+            x_tensor, a_tensor, params, cond, orgs, z, masks = self._next_batch('train')    # noqa: E501
 
             # Обработка обучающего батча, пересчет весов
             orgs, loss = process_batch(a_tensor, x_tensor, params, cond,
-                                       orgs, z,
+                                       orgs, z, masks,
                                        critic=((i+1) % self.n_critic == 0),
                                        is_training=True)
 
@@ -694,11 +777,11 @@ class Solver(object):
             if (i+1) % self.log_step == 0:
 
                 # Получение валидационного батча
-                x_tensor, a_tensor, params, cond, orgs, z = self._next_batch('validation')  # noqa: E501
+                x_tensor, a_tensor, params, cond, orgs, z, masks = self._next_batch('validation')  # noqa: E501
 
                 # Обработка обучающего батча, пересчет весов
                 orgs, loss = process_batch(a_tensor, x_tensor, params, cond,
-                                           orgs, z,
+                                           orgs, z, masks,
                                            critic=((i+1) % self.n_critic == 0),
                                            is_training=False)
 
@@ -767,8 +850,11 @@ class Solver(object):
             # potentially it may result in memory problems.
             n, _, __, cond = self.data.next_test_batch()
 
-            cond = self.cond_normalizer.transform(cond)
-            cond = torch.from_numpy(cond).to(self.device).float()
+            if self.conditional:
+                cond = self.cond_normalizer.transform(cond)
+                cond = torch.from_numpy(cond).to(self.device).float()
+            else:
+                cond = None
 
             z = self.sample_z(n.shape[0])
             z = torch.from_numpy(z).to(self.device).float()
@@ -875,6 +961,164 @@ class Solver(object):
             n_generated += batch_size
         return valid_orgs[:n]
 
+    def complete(self, batch_size: int = 1,
+                 nodes=None,
+                 nodes_mask=None,
+                 edges=None,
+                 edges_mask=None,
+                 params=None,
+                 params_mask=None,
+                 ctx=None):
+        """Complete a batch of samples.
+
+        Parameters
+        ----------
+        batch_size : int
+            Number of samples to complete.
+        nodes : torch.tensor
+            Partial specification of nodes.
+        nodes_mask : torch.tensor
+            Mask for the nodes. If an element is 1 (or True)
+            then the `Solver` will try to save the value of this
+            element in the generate structure.
+        edges : torch.tensor
+            Partial specification of edges.
+        edges_mask : torch.tensor
+            Mask for edges.
+        params : torch.tensor 
+            Partial specification of features.
+        params_mask : torch.tensor
+            Mask for parameter values (`params`).        
+        ctx
+            Context for the samples to be generated. May be optional.
+        """
+
+        if not self.completion:
+            raise Exception('The model must be trained for completion to use this method.')
+
+        if ctx is not None:
+            if not isinstance(ctx, np.ndarray):
+                ctx = np.array(ctx)
+            if ctx.ndim == 1:
+                ctx = np.stack([ctx] * batch_size, axis=0)
+            elif ctx.ndim == 2:
+                if ctx.shape[0] == 1:
+                    ctx = np.concatenate([ctx] * batch_size, axis=0)
+                elif ctx.shape[0] != batch_size:
+                    raise ValueError('For two-dimensional ctx, the first '
+                                     'dimension must be 1 or match the '
+                                     'batch size')
+                else:
+                    pass   # ctx is fine as it is
+
+            ctx = self.cond_normalizer.transform(ctx)
+            ctx = torch.from_numpy(ctx).to(self.device).float()
+
+        if (nodes is not None) != (nodes_mask is not None):
+            raise ValueError('nodes and nodes_mask must be either both specified or not')
+        
+        if nodes is not None and nodes_mask is not None:
+            if nodes.shape != nodes_mask.shape:
+                raise ValueError('nodes and nodes_mask must have the same shape')
+            if nodes.ndim == 1:
+                nodes = np.stack([nodes] * batch_size, axis=0)
+                nodes_mask = np.stack([nodes_mask] * batch_size, axis=0)
+            elif nodes.ndim == 2:
+                if nodes.shape[0] == 1:
+                    nodes = np.concatenate([nodes] * batch_size, axis=0)
+                    nodes_mask = np.concatenate([nodes_mask] * batch_size, axis=0)
+                elif nodes.shape[0] != batch_size:
+                    raise ValueError('For two-dimensional nodes specification, the first '
+                                     'dimension must be 1 or match the '
+                                     'batch size')
+                else:
+                    pass
+
+        # Load the trained generator.
+        self.restore_model(self.test_iters)
+
+        self.G.eval()
+        self.D.eval()
+        self.V.eval()
+
+        with torch.no_grad():
+            # Sample noise
+            z = self.sample_z(batch_size)
+            # Make tensor and pass to the device
+            z = torch.from_numpy(z).to(self.device).float()
+            
+            # Transform partial specification into the G's format
+            x = torch.from_numpy(nodes).to(self.device).long()         # Nodes.
+            x_tensor = self.label2onehot(x, self.m_dim)
+            nodes_mask = torch.from_numpy(nodes_mask).to(self.device)
+           
+            # Z-to-target
+            edges_hat, nodes_hat, params_hat = self._invoke_G(z, ctx,
+                                                              partial=(x_tensor, None),
+                                                              partial_masks=(nodes_mask, None))
+
+            # Convert to organizations
+            return self._orgs_from(edges_hat, nodes_hat, params_hat, ctx)
+
+    def complete_valid(self, n: int, *, 
+                 nodes=None,
+                 nodes_mask=None,
+                 edges=None,
+                 edges_mask=None,
+                 params=None,
+                 params_mask=None,
+                 ctx=None, 
+                 max_generate: int = 1000):
+        """Make samples completing the specified one.
+
+        Parameters
+        ----------
+        n : int
+            Number of samples completing the given one.
+        nodes : torch.tensor
+            Partial specification of nodes.
+        nodes_mask : torch.tensor
+            Mask for the nodes. If an element is 1 (or True)
+            then the `Solver` will try to save the value of this
+            element in the generate structure.
+        edges : torch.tensor
+            Partial specification of edges.
+        edges_mask : torch.tensor
+            Mask for edges.
+        params : torch.tensor 
+            Partial specification of features.
+        params_mask : torch.tensor
+            Mask for parameter values (`params`).        
+        ctx
+            Context for the samples to be generated. May be optional.
+        max_generate : int
+            Maximal number of instances to generate. If the underlying
+            model accuracy is low, it may take too much time to generate
+            the required number of valid organizations. This parameter
+            helps to control the process and stop generation even if
+            the required count isn't achieved.            
+        """
+        
+        if not self.completion:
+            raise Exception('The model must be trained for completion to use this method.')
+        
+        valid_orgs = []
+        batch_size = 32
+        n_generated = 0
+        while len(valid_orgs) < n and n_generated < max_generate:
+            candidates = self.complete(batch_size,
+                                       nodes=nodes,
+                                       nodes_mask=nodes_mask,
+                                       edges=edges,
+                                       edges_mask=edges_mask,
+                                       params=params,
+                                       params_mask=params_mask,
+                                       ctx=ctx)
+            valid_orgs.extend([org for org in candidates
+                               if self.org_model.validness(org)])
+            n_generated += batch_size
+        return valid_orgs[:n]        
+
     def _pretrain(self):
         """Pretrain models."""
 
@@ -884,7 +1128,7 @@ class Solver(object):
                                target_nodes,
                                target_edges,
                                target_params,
-                               cond,
+                               cond, masks,
                                max_iters=1000):
             loss_fn = torch.nn.BCELoss()
             optimizer = torch.optim.Adam(model.parameters(), lr=0.001)
@@ -893,7 +1137,11 @@ class Solver(object):
                 optimizer.zero_grad()
                 input_z = self.sample_z(BATCH_SIZE)
                 z = torch.from_numpy(input_z).to(self.device).float()
-                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond)
+                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond,
+                                                                  partial=(target_nodes,
+                                                                           target_edges,
+                                                                           target_params),
+                                                                  partial_masks=masks)
                 value_bad = model(edges_hat,
                                   nodes_hat,
                                   params_hat,
@@ -919,15 +1167,25 @@ class Solver(object):
                 optimizer.step()
 
         def pretrain_generator(z, target_nodes, target_edges,
-                               target_params, cond,
+                               target_params, cond, masks,
                                max_iters=1000, loss_eps=0.01):
             loss_fn = torch.nn.BCELoss()
             optimizer = torch.optim.Adam(self.G.parameters(), lr=0.001)
             for i in range(max_iters):
                 optimizer.zero_grad()
-                edges_hat, nodes_hat, params_hat = self._invoke_G(z, cond)
+                edges_hat, nodes_hat, params_hat = self._invoke_G(z,
+                                                                  cond,
+                                                                  partial=(target_nodes,
+                                                                           target_edges,
+                                                                           target_params),
+                                                                  partial_masks=masks)
                 loss = loss_fn(nodes_hat, target_nodes) + \
                     loss_fn(edges_hat, target_edges)
+                # If train for completion then additional loss for
+                # non-compliance
+                if self.completion:
+                    loss = loss + compliance_loss((1 - target_nodes[:, :, 0], masks[0]),
+                                                  1 - nodes_hat[:, :, 0])
                 loss.backward()
                 optimizer.step()
                 loss_value = loss.detach().cpu().item()
@@ -936,24 +1194,43 @@ class Solver(object):
             print(f'Generator loss@pretrain: {loss_value:.5f}')
 
         # Get a batch of real examples
-        x_tensor, a_tensor, params, cond, _, z = self._next_batch('train', BATCH_SIZE)     # noqa: E501
+        x_tensor, a_tensor, params, cond, _, z, masks = self._next_batch('train', BATCH_SIZE)     # noqa: E501
 
         # Use these examples to give the validator and discriminator
         # ideas of what is good and evil
         pretrain_validator(self.V, x_tensor, a_tensor, params, cond,
-                           max_iters=10)
+                           masks, max_iters=10)
         pretrain_validator(self.D, x_tensor, a_tensor, params, cond,
-                           max_iters=10)
+                           masks, max_iters=10)
 
         # Use the noise to pretrain the generator.
         # It tries to map each point to the respective
         # sample
         pretrain_generator(z, x_tensor, a_tensor, params, cond,
-                           max_iters=1000, loss_eps=0.01)
+                           masks, max_iters=1000, loss_eps=0.01)
 
-    def _invoke_G(self, z, cond):
+    def _invoke_G(self, z, cond, partial=None, partial_masks=None):
         """Generate a batch of graphs."""
-        edges_logits, nodes_logits, node_params = self.G(cond, z)
+        if self.completion:
+            batch_size = z.shape[0]
+            if partial is None:
+                partial_nodes = torch.zeros((batch_size,
+                                             self.m_dim,
+                                             self.m_dim))
+            else:
+                partial_nodes = partial[0]
+            if partial_masks is None:
+                partial_nodes_mask = torch.zeros((batch_size,
+                                                  self.m_dim))
+            else:
+                partial_nodes_mask = partial_masks[0]
+            edges_logits, nodes_logits, node_params = self.G(partial_nodes,  # nodes
+                                                             None,           # edges
+                                                             partial_nodes_mask,   # nodes mask
+                                                             None,                 # edges mask                                                             
+                                                             cond, z)
+        else:
+            edges_logits, nodes_logits, node_params = self.G(cond, z)
         # Postprocess with Gumbel softmax
         edges_hat = self.postprocess((edges_logits, ),
                                      self.post_method)[0]
@@ -988,6 +1265,11 @@ class Solver(object):
                              'Only ''train'' and ''validation'' supported')
 
         z = self.sample_z(x.shape[0])  # Батчи одинакового размера
+        # If train for completion then generate a random mask
+        if self.completion:
+            nodes_mask, edges_mask = make_random_completion_mask(x, a, None, None)
+        else:
+            nodes_mask, edges_mask = None, None
         orgs = [Organization(x_, a_, node_features=p_, condition=c_)
                 for x_, a_, p_, c_ in zip(x,
                                           a,
@@ -1018,7 +1300,7 @@ class Solver(object):
             c = self.cond_normalizer.transform(c)
             c = torch.from_numpy(c).to(self.device).float()
 
-        return x_tensor, a_tensor, p, c, orgs, z
+        return x_tensor, a_tensor, p, c, orgs, z, (nodes_mask, edges_mask)
 
     def _orgs_from(self, edges_hat, nodes_hat, params_hat, cond):
         """Получение организационных структур из выходных
@@ -1061,15 +1343,19 @@ class Solver(object):
         """Writes samples to a given file."""
         with open(filename, 'w') as f:
             for i, org in enumerate(orgs):
+                if hasattr(self.org_model, 'check_paramater_feasibility'):
+                    check = self.org_model.check_paramater_feasibility(org.nodes,                  # noqa: E501
+                                                                       org.node_features,          # noqa: E501
+                                                                       # logging=True,             # noqa: E501
+                                                                       ctx=org.condition)
+                else:
+                    check = self.org_model.validness(org)
                 print(f'Sample #{i}:',
                       '\nContext\n', org.condition,
                       '\nNodes:\n', org.nodes,
                       '\nStaff:\n', org.node_features,
                       '\nEdges:\n', org.edges,
-                      '\nCheck results:\n', self.org_model.check_paramater_feasibility(org.nodes,                  # noqa: E501
-                                                                                       org.node_features,          # noqa: E501
-                                                                                       # logging=True,             # noqa: E501
-                                                                                       ctx=org.condition),         # noqa: E501
+                      '\nCheck results:\n', check,
                       file=f)
                 print('=======', file=f)
             if log is not None:

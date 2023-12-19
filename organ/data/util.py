@@ -27,6 +27,27 @@ def save_dataset(nodes, edges, staff, cond,
                  dataset_dir, org_model,
                  validation=0.1,
                  test=0.1):
+    """Split the dataset to train-validation-test and save it.
+    
+    Parameters
+    ----------
+    nodes : np.array
+        Node types.
+    edges : np.array
+        Edge types.
+    staff : np.array, None
+        Node features (optional).
+    cond : np.array, None
+        Structure specification, condition for cGAN (optional).
+    dataset_dir : str
+        Directory where to put the dataset.
+    org_model
+        Organization structure specification.
+    validation : int, float
+        Number (or fraction) of validation samples.
+    test : int, float
+        Number (or fraction) of test samples.
+    """
 
     dataset_size = len(nodes)
 
@@ -50,15 +71,19 @@ def save_dataset(nodes, edges, staff, cond,
     test_idx = all_idx[train + validation:]
 
     # Make sure that even one param has its dimension
-    if len(staff.shape) < 3:
-        staff = np.expand_dims(staff, axis=-1)
-    if len(cond.shape) < 2:
-        cond = np.expand_dims(cond, axis=-1)
+    if staff is not None:
+        if len(staff.shape) < 3:
+            staff = np.expand_dims(staff, axis=-1)
+    if cond is not None:
+        if len(cond.shape) < 2:
+            cond = np.expand_dims(cond, axis=-1)
 
     np.save(os.path.join(dataset_dir, 'data_nodes.npy'), nodes)
     np.save(os.path.join(dataset_dir, 'data_edges.npy'), edges)
-    np.save(os.path.join(dataset_dir, 'data_staff.npy'), staff)
-    np.save(os.path.join(dataset_dir, 'data_cond.npy'), cond)
+    if staff is not None:
+        np.save(os.path.join(dataset_dir, 'data_staff.npy'), staff)
+    if cond is not None:
+        np.save(os.path.join(dataset_dir, 'data_cond.npy'), cond)
 
     with open(os.path.join(dataset_dir, 'data_meta.pkl'), 'wb') as f:
         pickle.dump({'train_idx': train_idx,
@@ -75,8 +100,10 @@ def save_dataset(nodes, edges, staff, cond,
                      'edge_num_types': org_model.EDGE_N_TYPES,
                      'vertexes': org_model.MAX_NODES_PER_GRAPH,
 
-                     'features_per_node': staff.shape[2],
-                     'condition_dim': cond.shape[1],
+                     'features_per_node': staff.shape[2] \
+                          if staff is not None else 0,
+                     'condition_dim': cond.shape[1] \
+                          if cond is not None else 0,
                      }, f)
 
 

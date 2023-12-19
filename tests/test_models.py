@@ -81,6 +81,33 @@ def test_edge_aware_generator():
                              None)         # Non-parametric
 
 
+def test_completion_generator():
+    z_dim = 3
+    n_nodes = 6
+    # Данная версия дискриминатора рассчитывает на то, что есть
+    # не более одной вершины каждого типа. Соответственно,
+    # слот под вершину определенного типа и есть определенная позиция.
+    n_edge_types = 2
+    g = organ.models.CompletionGenerator([7, 8],
+                                         [9, 11],
+                                         z_dim,         # Размерность входного вектора  # noqa: E501
+                                         n_nodes,       # Количество вершин в графе     # noqa: E501
+                                         n_edge_types,  # Количество типов дуг
+                                         0.0)
+                                         
+    # Этому генератору нужны еще и фрагменты конфигураций на вход
+    batch_size = 2
+    nodes = torch.rand(batch_size, n_nodes, n_nodes)
+    nodes_mask = torch.rand(batch_size, n_nodes) > 0.5
+    edges = torch.rand(batch_size, n_nodes, n_nodes, n_edge_types)
+    edges_mask = torch.rand(batch_size, n_nodes, n_nodes) > 0.5
+    z = torch.rand(batch_size, z_dim)
+    e, n, _ = g(nodes, edges, nodes_mask, edges_mask, None, z)
+    
+    assert e.shape == (batch_size, n_nodes, n_nodes, n_edge_types)
+    assert n.shape == (batch_size, n_nodes)
+
+
 def test_cpgenerator():
     z_dim = 3
     cond_dim = 5

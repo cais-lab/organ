@@ -32,6 +32,19 @@ def make_config(pretrain: bool = False):
     return args
 
 
+def test_compliance_loss():
+    nodes = torch.tensor([[1, 0, 1]], dtype=torch.float32)
+    nodes_mask = torch.tensor([[False, True, True]], dtype=torch.int8)
+
+    # Compliant
+    gen_nodes = torch.tensor([[0, 0, 1]], dtype=torch.float32)
+    assert organ.solver.compliance_loss((nodes, nodes_mask), gen_nodes) < 1e-3
+
+    # Non-compliant
+    gen_nodes = torch.tensor([[0, 1, 1]], dtype=torch.float32)
+    assert organ.solver.compliance_loss((nodes, nodes_mask), gen_nodes) > 1e-3
+
+
 def test_create_solver():
     args = make_config()
     organ.solver.Solver(args)
