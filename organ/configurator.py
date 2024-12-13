@@ -11,8 +11,50 @@ import numpy as np
 from organ.structure.models import Organization 
 
 
-class OrganizationConfigurationConflict(Exception):
+class OrganizationConfigurationException(Exception):
+    """Base exception to control multilevel configuration."""
     pass
+
+class ConfigurationConflict(OrganizationConfigurationException):
+    """Organization parameters conflict.
+    
+    Required parameters for the organization conflict with the 
+    parameter values, inferred from the upper-level."""
+    pass
+
+class SubmodelNotNeeded(OrganizationConfigurationException):
+    """Upper-level model doesnt require the specific lower level one."""
+    pass
+
+def make_rule(upper_level_idx: int,
+              f: Callable[[Organization, np.ndarray], np.ndarray]) -> Callable[[Organization, np.ndarray], np.ndarray]:
+    """Simplifies writing dependency functions.
+    
+    Takes care of the situation when upper level organization
+    doesn't contain a node to be refined.
+    
+    Parameters
+    ----------
+    upper_level_idx: int
+        Index of a node in the upper-level organization configuration
+        corresponding to the considered detailed organization
+        (lower level)
+    f: Callable
+        Basic callable, inferring the parameters of lower-level
+        structure based on the configuration of the upper-level
+        structure.
+    Returns
+    -------
+    Callable
+        Function, inferring the parameters of the lower-level
+        structure based in the configuration of the upper-level.
+    """
+    def wrapper(o: Organization, initial: np.ndarray) -> np.ndarray:
+        if o.nodes[upper_level_idx] == 0:
+            raise SubmodelNotNeeded()
+        return f(o, initial)
+    
+    return wrapper
 
 class Configurator:
     """Generates complex (multi-level) structures according to the specified
@@ -67,21 +109,27 @@ class Configurator:
             cond = self._make_condition(partial_org,
                                         current_aspect_name,
                                         conditions.get(current_aspect_name, None))
-        except OrganizationConfigurationConflict:
-            return None
 
-        # Generate several organizations
-        orgs = self.generators[current_aspect_name].generate_valid(self.N_PROBES, ctx=cond)
-        for org in orgs:
-            partial_org[current_aspect_name] = org
-            complete = self._generate_recursive(current_aspect_idx + 1,
-                                                partial_org,
-                                                conditions)
-            # If some configuration was found down the line
-            # return it
-            if complete is not None:
-                return complete
-            del partial_org[current_aspect_name]
+            # Generate several organizations
+            orgs = self.generators[current_aspect_name].generate_valid(self.N_PROBES, ctx=cond)
+            for org in orgs:
+                partial_org[current_aspect_name] = org
+                complete = self._generate_recursive(current_aspect_idx + 1,
+                                                    partial_org,
+                                                    conditions)
+                # If some configuration was found down the line
+                # return it
+                if complete is not None:
+                    return complete
+                del partial_org[current_aspect_name]
+                                        
+        except SubmodelNotNeeded:
+            return self._generate_recursive(current_aspect_idx + 1,
+                                            partial_org,
+                                            conditions)
+
+        except ConfigurationConflict:
+            return None
 
         # If no configurations were found (and returned)
         # up to this moment, then report failure

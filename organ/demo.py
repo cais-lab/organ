@@ -6,6 +6,7 @@ import torch
 
 import numpy as np
 
+from organ.structure.models import Organization
 
 class LogisticsDepartmentOrganizationStructureModel:
     """SCSP demo model class for the logistics department
@@ -20,7 +21,7 @@ class LogisticsDepartmentOrganizationStructureModel:
         3:  {'title': 'Product Stock Management', 'status': 0},
         4:  {'title': 'Planning', 'status': 2, 'replacement': [5, 6, 7], 'children': [8]},
         5:  {'title': 'Material Planning', 'status': 0},
-        6:  {'title': 'Product Stick Planning', 'status': 0},
+        6:  {'title': 'Product Stock Planning', 'status': 0},
         7:  {'title': 'Logistics Planning', 'status': 0},
         8:  {'title': 'Analytics', 'status': 0},
         9:  {'title': 'Audit', 'status': 0},
@@ -1879,11 +1880,12 @@ class AgricultureRobotModel:
         orgs = []
         div_flag = 0
         
-        action = 0 if ctx[0] > 0 else 1
+        action = 0 if ctx[0] > 0.1 else 1
         tmp_nodes = np.zeros(self.NODE_N_TYPES)
         tmp_nodes[action + 1] = 1
         
         tmp_nodes[3] = 1
+        tmp_nodes[7] = 1
         
         productivity = ctx[action] / self.ctx_base[action]
         if productivity > 1.5:

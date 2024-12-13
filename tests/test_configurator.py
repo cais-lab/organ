@@ -14,6 +14,7 @@ import numpy as np
 import pytest
 
 import organ.configurator
+from organ.configurator import make_rule
 from organ.structure.models import Organization
 
 
@@ -95,10 +96,13 @@ def mock_link_foo(upper_level: Organization,
     
     The function is called to find out what input features should
     be for the lower-level structure, taking into account the
-    upper level one. It should return either the specification,
-    or None, if it turns out to be impossible to merge the requirements
-    of the upper level `upper_level` with the
-    requirements `initial_context`.
+    upper level one. It should return the specification,
+    or raise one of the exceptions:
+       - `ConfigurationConflict` if it turns out to 
+       be impossible to merge the requirements of the upper level 
+       `upper_level` with the requirements `initial_context`,
+       - `SubmodelNotNeeded` if there should
+       be no lower level system for the upper level one.
 
     This particular function just tries to replicate the upper-level
     structure."""
@@ -111,20 +115,18 @@ def mock_link_foo(upper_level: Organization,
         context[0] = np.nan
     else:
         context = np.array(initial_context)   # copy
-    
+
     # Find out the number of active nodes in the upper-level
     # organization
     n_nodes = (upper_level.nodes != 0).sum()
 
-    print(n_nodes)
-    
     # Try to merge it with the requirement
     if np.isnan(context[0]):
         context[0] = n_nodes
     elif np.isclose(context[0], n_nodes):
         pass
     else:
-        raise organ.configurator.OrganizationConfigurationConflict()
+        raise organ.configurator.ConfigurationConflict()
 
     return context
 
@@ -154,8 +156,8 @@ def test_create_configurator():
         generators={'top': MockGenerator(3),
                     'one': MockGenerator(5),
                     'three': MockGenerator(5)},
-        dependencies={('top', 'one'): mock_link_foo,
-                      ('top', 'three'): mock_link_foo,
+        dependencies={('top', 'one'): make_rule(1, mock_link_foo),
+                      ('top', 'three'): make_rule(3, mock_link_foo),
                      },
         sequence=['top', 'one', 'three']
     )
@@ -165,15 +167,15 @@ def test_generate_multilevel():
         generators={'top': MockGenerator(4),
                     'one': MockGenerator(5),
                     'three': MockGenerator(5)},
-        dependencies={('top', 'one'): mock_link_foo,
-                      ('top', 'three'): mock_link_foo,
+        dependencies={('top', 'one'): make_rule(1, mock_link_foo),
+                      ('top', 'three'): make_rule(3, mock_link_foo),
                      },
         sequence=['top', 'one', 'three']
     )
     
     # A possible case:
-    # Three nodes on the top level (1 and 2) and 
-    # submodels for the one and 
+    # Three nodes on the top level (1, 2, 3) and 
+    # submodels for the one and three
     multi_org = configurator.generate({
         'top': np.array([3])
     })
@@ -181,6 +183,7 @@ def test_generate_multilevel():
     assert len(multi_org) == 3
     assert 'top' in multi_org
     assert 'one' in multi_org
+    assert 'three' in multi_org
     assert (multi_org['one'].nodes != 0).sum() == 3
     # mock_link_foo just propagates the number of nodes
     assert (multi_org['three'].nodes != 0).sum() == 3
@@ -195,6 +198,18 @@ def test_generate_multilevel():
     })
     assert multi_org is None
    
-    # TODO if there is no upper level node,
-    # than there should be no submodel for it
-    
+    # When there is some sub-model generation scheme,
+    # however, there is no respective node in the upper
+    # level
+    # E.g., in this case in the upper level there
+    # are only 1 and 2, therefore, there is no need
+    # to create the submodel 'three'
+    multi_org = configurator.generate({
+        'top': np.array([2]),
+    })
+    assert multi_org is not None
+    assert len(multi_org) == 2    # top and one
+    assert 'top' in multi_org
+    assert 'one' in multi_org
+    assert (multi_org['top'].nodes != 0).sum() == 2
+    assert (multi_org['one'].nodes != 0).sum() == 2
