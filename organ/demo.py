@@ -1546,3 +1546,385 @@ class ManagementModel(ManagementStructureModel):
                                        node_7_cnt,
                                        node_2_cnt,
                                        node_6_cnt]))
+
+class AgricultureCPSModel:
+
+    node_type_dict = { # status: 0 - optional, 1 - mandatory, 2 - replaceble
+        0:  {'title': 'none', 'status': 0, 'weight': 0}, 
+        1:  {'title': 'Оператор', 'status': 1}, 
+        2:  {'title': 'Робот 1', 'status': 0},
+        3:  {'title': 'Робот 2', 'status': 0},
+        4:  {'title': 'Робот 3', 'status': 0},
+        5:  {'title': 'Робот 4', 'status': 0},
+        6:  {'title': 'Робот 5', 'status': 0},
+    }
+
+    top_level_nodes = [1]
+
+    relations_dict = [
+        # 0   1   2   3   4   5   6   7   8   9   10  11
+        [ 0,  0,  0,  0,  0,  0,  0], # 0
+        [ 0,  0,  1,  1,  1,  1,  1], # 1
+        [ 0,  0,  0,  0,  0,  0,  0], # 2
+        [ 0,  0,  0,  0,  0,  0,  0], # 3
+        [ 0,  0,  0,  0,  0,  0,  0], # 4
+        [ 0,  0,  0,  0,  0,  0,  0], # 5
+        [ 0,  0,  0,  0,  0,  0,  0], # 6
+    ]
+
+    # Number of node types
+    NODE_N_TYPES = len(node_type_dict)
+    # Number of edge types
+    EDGE_N_TYPES = 2
+    # Max number of vertices per graph
+    MAX_NODES_PER_GRAPH = len(node_type_dict)
+
+    # Parametrization constants
+    robot_upper_limit = [1.5, 3]
+    input_max = [7.5, 15]
+
+    def generate_values(self, nodes, v, logging=False):
+        robot_counter = 0
+        action = 0 if v[0] > 0 else 1
+        v_remain = v[action]
+
+        load = np.zeros((self.NODE_N_TYPES, 2))
+        for  i in range(2, self.NODE_N_TYPES):
+            if (nodes[i] > 0.5): 
+                robot_counter += 1
+                load[i][action] = min(self.robot_upper_limit[action], v_remain)
+                v_remain = v_remain - load[i][action]
+
+        load[1][action] = int(robot_counter / 2 + 0.5)
+
+        return load
+
+    def generate_model(self, robots_count=False):
+        #generate nodes
+        tmp_nodes = np.zeros(self.NODE_N_TYPES)
+        tmp_nodes[1] = 1
+        if robots_count == False: robots_count = int(np.random.uniform(1, self.NODE_N_TYPES - 2) + 0.5)
+        for  i in range(2, self.NODE_N_TYPES):
+            if (robots_count > 0): 
+                tmp_nodes[i] = i
+                robots_count = robots_count - 1
+
+        #fill list with generated nodes and fill all relations
+        nodes = list(self.node_type_dict.keys())
+        relations = np.array(copy.deepcopy(self.relations_dict))
+
+        for node_key in self.node_type_dict:
+            if node_key not in tmp_nodes:
+                nodes[node_key] = 0
+                relations[node_key, :] = 0
+                relations[:, node_key] = 0
+
+        nodes = np.array(nodes)
+
+        return nodes, relations
+
+    def generate_parametrized_model(self, action=False, robots_count=False, logging=False):
+        nodes, relations = generate_model(robots_count)
+        if action == False: action = int(np.random.uniform(0, 1) + 0.5)
+
+        if logging:
+            print("\nnodes=", nodes)
+        robot_count = sum(x != 0 for x in nodes) - 1
+        v = np.zeros(2)
+        v[action] = self.robot_upper_limit[action] * robot_count
+
+        load = generate_values(nodes, v, logging)
+        return nodes, relations, load, v
+
+    def check_relations(self, nodes, relations):
+        target_relations = np.array(copy.deepcopy(self.relations_dict))
+        for node_key in self.node_type_dict:
+            if node_key not in nodes:
+                target_relations[node_key, :] = 0
+                target_relations[:, node_key] = 0
+
+        relations_diff = np.array([relations == target_relations])
+        result = relations_diff.all()
+        return result, relations_diff
+
+    def check_nodes(self, nodes):
+        if (nodes[1] > 0.5) and (sum(x != 0 for x in nodes) - 1 > 1):
+            return True
+        return False
+
+    def overlap(self, first, last, another_first, another_last)->bool:
+        #print(first, last, another_first, another_last)
+        return min(last, another_last) - max(first, another_first) >= 0
+
+    def check_paramater_feasibility(self, nodes, load, v, logging=False):
+
+        log = ''
+        action = 0 if v[0] > 0 else 1
+        non_action = 1 if v[0] > 0 else 0
+        actual_load = 0
+        actual_robots = 0
+        #print('load', load)
+        for  i in range(2, self.NODE_N_TYPES):
+            if (nodes[i] > 0.5): 
+                #print('nodes[i]', nodes[i])
+                #print('load[i][action]', load[i][action])
+                #print('self.robot_upper_limit[action] ', self.robot_upper_limit[action] )
+                if ((load[i][action] > self.robot_upper_limit[action] or load[i][action] < 0) or
+                    (load[i][non_action] > 0.1 or load[i][action] < 0)):
+                    if logging:
+                        log = f"Node {i} " \
+                              f"{self.node_type_dict[i]['title']} " \
+                              f"doesn't meet the requirements: " \
+                              f"load = {load[i]}"
+                    #print('Fail!')
+                    return False, log
+                else:
+                    actual_load += load[i][action]
+                    actual_robots += 1
+
+        if (load[1][action] < actual_robots / 2.0 or load[1][action] > actual_robots):
+            if logging:
+                log = f"Node 0 " \
+                      f"{self.node_type_dict[0]['title']} " \
+                      f"doesn't meet the requirements: " \
+                      f"load = {load[0][0]}"
+                #print('Fail!')
+                return False, log
+
+        #print('Success!')
+        return True, None
+
+    def generate_augmentation(self, ground_truth_nodes, ground_truth_edges, ground_truth_load, ground_truth_ctx, logging=False, max_iterations=100):
+        #
+        #   Augment parameters
+        #
+
+        src_sample_id = np.random.randint(0, ground_truth_nodes.shape[0])
+        base_nodes = ground_truth_nodes[src_sample_id]
+        base_edges = ground_truth_edges[src_sample_id]
+        base_load = ground_truth_load[src_sample_id]
+        base_ctx = ground_truth_ctx[src_sample_id]
+
+        iterations = 0
+        action = 0 if base_ctx[0] > base_ctx[1] else 1
+        #print('action', action)
+        aug_load = copy.deepcopy(base_load)
+        #print('base_nodes', base_nodes)
+        robot_count = sum(x != 0 for x in base_nodes) - 1
+        #print('robot_count', robot_count)
+        while iterations < max_iterations:
+            iterations += 1
+            aug_load = copy.deepcopy(base_load)
+            #print('aug_load: ', aug_load)
+            aug_load[1, action] = int(np.random.uniform(robot_count, robot_count/2) + 0.5)
+
+            aug_ctx = copy.deepcopy(base_ctx)
+            aug_ctx[action] = np.random.uniform(1, robot_count*self.robot_upper_limit[action])
+
+            tmp_values = np.random.uniform(0.5, 1.0, [robot_count])
+            tmp_sum = sum(tmp_values)
+            tmp_values = tmp_values / tmp_sum
+            #print('tmp_values', tmp_values)
+            #print('base_nodes', base_nodes)
+
+            counter = 0
+            for  i in range(2, self.NODE_N_TYPES):
+                if (base_nodes[i] > 0.5):
+                    #print('counter', counter)
+                    aug_load[i, action] = aug_ctx[action] * tmp_values[counter]
+                    counter += 1
+            #print('aug_load (aug): ', aug_load)                
+
+            if (check_paramater_feasibility(base_nodes, aug_load, aug_ctx)[0]):
+                    #print('Good augmentation!')
+                    return base_nodes, base_edges, aug_load, aug_ctx
+
+        return False
+
+    def generate_dataset(self):
+        nodes_list = []
+        edges_list = []
+        load_list = []
+        ctx_list = []
+        for action in range(0, 2):
+            for robots_count in range(1, 6):
+                nodes, relations, load, ctx = generate_parametrized_model(action=action, robots_count=robots_count)
+                nodes_list.append(nodes)
+                edges_list.append(relations)
+                load_list.append(load)
+                ctx_list.append(ctx)
+        return np.stack(nodes_list, axis=0), \
+               np.stack(edges_list, axis=0), \
+               np.stack(load_list, axis=0), \
+               np.stack(ctx_list, axis=0)
+
+    def check_uniqueness(self, ground_truth_nodes, ground_truth_edges, ground_truth_staff, ground_truth_ctx, nodes, edges, staff, ctx):
+        for i in range(ground_truth_nodes.shape[0]):
+            if  ((ground_truth_nodes[i]==nodes).all() and
+                 (ground_truth_edges[i]==edges).all() and
+                 (ground_truth_staff[i]==staff).all() and
+                 (ground_truth_ctx[i]==ctx).all()):
+                return False
+        return True
+
+    def generate_augmented_dataset(self, dataset_size):
+        nodes, edges, load, ctx = generate_dataset()
+        #print(nodes)
+        aug_nodes = nodes
+        aug_edges = edges
+        aug_load = load
+        aug_ctx = ctx
+        aug_size = dataset_size - len(nodes)
+        for i in range(aug_size):
+            aug_nodes_tmp, aug_edges_tmp, aug_load_tmp, aug_ctx_tmp = generate_augmentation(nodes, edges, load, ctx, False, 100)
+            if len(aug_nodes_tmp) > 0:
+                unique_flag = True
+                for j in range(len(aug_nodes)):
+                    if (aug_nodes[j]==aug_nodes_tmp).all() and \
+                        (aug_edges[j]==aug_edges_tmp).all() and \
+                        (aug_load[j]==aug_load_tmp).all() and \
+                        (aug_ctx[j]==aug_ctx_tmp).all():
+                        #print("Not a unique augmentation!", i, j)
+                        unique_flag = False
+                        j = j-1
+                        break
+                if unique_flag:
+                    #print(aug_nodes_tmp)
+                    aug_nodes = np.r_[aug_nodes,[aug_nodes_tmp]]
+                    #aug_nodes = np.append(aug_nodes, [aug_nodes_tmp], axis=1)
+                    #print(aug_nodes)
+                    aug_edges = np.r_[aug_edges, [aug_edges_tmp]]
+                    aug_load = np.r_[aug_load, [aug_load_tmp]]
+                    aug_ctx = np.r_[aug_ctx, [aug_ctx_tmp]]
+            else:
+                break
+        #print(len(aug_nodes))
+        return aug_nodes, aug_edges, aug_load, aug_ctx
+    
+    def __init__(self):
+        super(AgricultureCPSModel, self).__init__()
+
+    def validness(self, org) -> bool:
+        """Checks structure validness.
+
+        Parameters
+        ----------
+        org : Configuration
+            Organization structure configuration.
+
+        Returns
+        -------
+        bool
+            True if the configuration is valid,
+            False otherwise.
+        """
+        return self.check_nodes(org.nodes) and \
+            self.check_relations(org.nodes, org.edges)[0] and \
+            self.check_paramater_feasibility(org.nodes,
+                                             org.node_features,
+                                             org.condition)[0]
+
+    def metrics(self, org) -> dict:
+        """Returns a dict with relevant metric values.
+
+        Parameters
+        ----------
+        org : Configuration
+            Organization structure configuration.
+
+        Returns
+        -------
+        dict
+            metrics and functions for their evaluation.
+        """
+        return {
+            'node score': self.check_nodes(org.nodes),
+            'edge score': self.check_relations(org.nodes, org.edges)[0],
+            'staff score': self.check_paramater_feasibility(org.nodes,
+                org.node_features,
+                org.condition)[0]
+        }
+
+class AgricultureRobotModel:
+
+    node_type_dict = { # status: 0 - optional, 1 - mandatory, 2 - replaceble
+        0:  {'title': 'none', 'status': 0, 'weight': 0}, 
+        1:  {'title': 'Бункер для удобрений', 'status': 0}, 
+        2:  {'title': 'Бункер для травы', 'status': 0},
+        3:  {'title': 'Пара моторов 1', 'status': 1},
+        4:  {'title': 'Пара моторов 2', 'status': 0},
+        5:  {'title': 'Лидар', 'status': 0},
+        6:  {'title': 'Камера', 'status': 0},
+        7:  {'title': 'Батарея', 'status': 1},
+    }
+
+    top_level_nodes = [1]
+
+    relations_dict = [[0 for col in range(8)] for row in range(8)]
+
+    # Number of node types
+    NODE_N_TYPES = len(node_type_dict)
+    # Number of edge types
+    EDGE_N_TYPES = 1
+    # Max number of vertices per graph
+    MAX_NODES_PER_GRAPH = len(node_type_dict)
+
+    # Parametrization constants
+    ctx_base = [1.0, 2.0]
+    
+    def generate(self, batch_size: int = 2, ctx = None):    
+    #def generate_valid(self, n: int, ctx=None, max_generate: int = 1000):        
+        assert ctx is None or ctx.shape == (2, )
+        
+        orgs = []
+        div_flag = 0
+        
+        action = 0 if ctx[0] > 0 else 1
+        tmp_nodes = np.zeros(self.NODE_N_TYPES)
+        tmp_nodes[action + 1] = 1
+        
+        tmp_nodes[3] = 1
+        
+        productivity = ctx[action] / self.ctx_base[action]
+        if productivity > 1.5:
+            return [] #not possible
+        elif productivity > 1.0:
+            tmp_nodes[4] = 1
+            tmp_nodes[5] = 1
+        elif productivity <= 1.0 / 1.5:
+            tmp_nodes[6] = 1
+        else: # 1.0 / 1.5 ... 1
+            div_flag = 1  #tmp_nodes[4] = 1 or tmp_nodes[5] = 1
+            
+        tmp_relations = np.array(copy.deepcopy(self.relations_dict))
+        
+        tmp_features = np.zeros(self.NODE_N_TYPES)
+        tmp_features[7] = 1 + tmp_nodes[4] + tmp_nodes[5]
+            
+        if div_flag == 1:
+            tmp_features[7] += 1
+
+            #print(tmp_nodes)
+            tmp_nodes[4] = 1
+            #print(tmp_nodes)
+            orgs.append(Organization(tmp_nodes,
+                                     tmp_relations,
+                                     node_features=tmp_features.reshape((-1, 1)),
+                                     condition=np.array([ctx])))
+            tmp_nodes = np.array(tmp_nodes)
+            tmp_nodes[4] = 0
+            tmp_nodes[5] = 1
+            #print(tmp_nodes)
+            orgs.append(Organization(tmp_nodes,
+                                     tmp_relations,
+                                     node_features=tmp_features.reshape((-1, 1)),
+                                     condition=np.array([ctx])))
+        else: 
+            orgs.append(Organization(tmp_nodes,
+                                     tmp_relations,
+                                     node_features=tmp_features.reshape((-1, 1)),
+                                     condition=np.array([ctx])))
+        return orgs
+
+    def generate_valid(self, n: int, ctx = None, max_generate: int=2):
+        return self.generate(n, ctx)
